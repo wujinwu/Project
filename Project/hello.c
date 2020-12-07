@@ -1,19 +1,15 @@
 #include <stdio.h>
-
+#include <string.h>
 void main() {
-     
-      double a = 0.0;
-      printf("plase score \n");
-      scanf("%lf",&a);
-      if(a  > 90){
-        printf("\nget BMW");
-      }else if (a > 80)      {
-        printf("\nget iphone");
-      }else if (a > 60)      {
-        printf("\nget wanju");
-      }else {
-        printf("\n no jiangli");
+    //一直输入,直到输入n退出
+     int i = 0;
+     do{
+      if(i % 5 == 0 && i % 3 != 0){
+          printf("%d\n",i);
       }
-    getchar();
-    getchar();
+      i++;
+     }while(i<=100);//循环条件
+   
+
+     getchar();
 }

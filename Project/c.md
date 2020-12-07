@@ -1042,7 +1042,209 @@ void main() {
     getchar();
     getchar();
 }
+``` 
+
+### switch 分支 
+```c
+//输入月份，显示季节
+void main() {
+      int  a = 1;
+      printf("Please enter month \n");
+      scanf("%d",&a);
+    switch (a){
+    case 1:
+    case 2:
+    case 3:
+          printf(" It's spring \n");
+      break;
+    case 4:
+    case 5:
+    case 6:
+           printf(" It's summer \n");
+    break;
+    case 7:
+    case 8:
+    case 9:
+          printf(" It's autumn \n");
+      break;
+    case 12:
+    case 10:
+    case 11:
+          printf(" It's winter \n");
+    break;
+    default:
+      break;
+    }
+    getchar();
+    getchar();
+}
+```  
+## 循环 控制
+1.多次输出,循环控制
+```c
+//从0到8 依次输出
+//0 number
+//1 number
+//2 number
+//3 number
+//4 number
+//5 number
+//6 number
+//7 number
+//8 number
+void main() {
+    for( int i = 0 ; i < 9 ; i++){
+          printf("%d number\n",i);
+    }
+    getchar();
+}
+```  
+2.多条初始化语句，循环变量迭代多条语句
+```c
+void main() {
+    for( int i = 0 , j = 0 ; i < 9 ; i ++ , j = i * 2){
+          printf("i = %d ; j= %d\n",i,j);
+    }
+    getchar();
+}
 ```
+1.练习
+```c
+void main() {
+   
+   //1-100内 9的倍数相加，以及个数
+   int i = 0;
+   int num = 0;
+   int total = 0;
+   for(i = 1 ;i < 100 ; i++){
+       if(i % 9 == 0){
+         num++;
+         total = total + i;
+       }
+   }
+   printf("1 - 100 内9的倍数相加 %d,9的倍数 的 个数%d\n",total,num);
+    getchar();
+}
+``` 
+```c
+void main() {
+   
+  //0-num 相加等于num的组合
+  for( int i = 0; i < 6; i++) {
+    printf("%d + %d = %d \n",i,(6-i),6);
+  }
+    getchar();
+}
+```
+## while循环 
+1.用while循环输出1-9 
+```c
+void main() {
+    int i = 1;
+    while (i <= 9)
+    {
+      printf("%d\n",i);
+      i++;
+    }
+     getchar();
+}
+
+```
+### 练习 
+1.输出1-100能被3整除的数
+```c
+void main() {
+    int i = 1;
+    while (i <= 100)
+    {
+      if(i%3 == 0){
+      printf("%d\n",i);
+    }
+      i++;
+    }
+     getchar();
+}
+```
+2.在控制台输出名字，直到输入exit退出
+```c
+#include <stdio.h>
+#include <string.h>
+void main() {
+    char i[10] = "" ;
+    while (strcmp(i, "exit")!=0)
+    {
+      printf("\nPlease enter a name\n");
+      scanf("%s",i);
+      printf("you name %s\n",i);
+    }
+     getchar();
+}
+```
+## do{循环语句,循环变量迭代}while(循环条件)  循环控制 
+```c
+void main() {
+  
+     int i = 0;//循环变量初始化
+     do{
+      printf("%d\n",i);//循环体
+      i++;//循环变量迭代
+     }while(i<9);//循环条件
+     getchar();
+}
+``` 
+##练习
+```c
+void main() {
+     //1-800相加的和
+     int i = 0;//循环变量初始化
+     int num = 0;
+     do{
+    //  printf("%d\n",i);//循环体
+      num = num + i;
+      i++;//循环变量迭代
+     }while(i<=800);//循环条件 
+     printf("%d \n",num);
+     getchar();
+}
+
+```
+
+```c
+#include <stdio.h>
+#include <string.h>
+void main() {
+    //一直输入,直到输入n退出
+     char s[10] = "";
+     do{
+  
+      printf("i like gowu   y/n");
+      scanf("%s",s);
+      getchar();  
+     }while(strcmp(s, "n") !=0);//循环条件
+   
+
+     getchar();
+}
+
+```
+
+```c
+void main() {
+    //1-100内能被5整除，但不能被3整除
+     int i = 0;
+     do{
+      if(i % 5 == 0 && i % 3 != 0){
+          printf("%d\n",i);
+      }
+      i++;
+     }while(i<=100);//循环条件
+   
+
+     getchar();
+}
+
+```
+
 
 
 
