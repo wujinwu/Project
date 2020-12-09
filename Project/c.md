@@ -1244,12 +1244,177 @@ void main() {
 }
 
 ```
+### 嵌套循环
+```c
+void main() {
+     //统计3个班的学生成绩，求各个班的平均成绩，和5个班的平均成绩
+     //班级的个数classNum,每个班级的人数stuNum
+     //各个班的总分classTotalNum
+     //score学生成绩
+     //各个班的总平均成绩 
+     //及格人数
+     int stuNum = 5;
+     int classNum = 3;
+     int classtotalNum=0;
+     int  classtotalNums=0;
+     int score = 0; 
+     int i,j;
+     int jige = 0;
+     for(i=0;i<classNum;i++){
+         classtotalNum = 0;
+         for ( j = 0; j < stuNum; j++) {
+            printf("di %d ban ji di %d ge xue sheng\n",i,j);
+            scanf("%d",&score);
+            classtotalNum += score;
+            if(score > 60){
+              jige++;
+            }
+         }
+         printf("di %d ban ji ping jun fen =%d\n",i,classtotalNum / stuNum);
+        classtotalNums += classtotalNum;
+
+     }
+    printf("ji ge ren shu =%d\n",jige);
+    printf("zong ping jun fen =%d\n",classtotalNums / (stuNum*classNum));
+
+     getchar();
+     getchar();
+}
+
+```
+### 九九乘法表
+```c
+void main() {
+   //打印99乘法表
+   for (int i = 1;i <= 9;i++){
+        for (int j = 1;j <= i;j++){
+       printf("%d * %d = %d \t",j,i,i*j);
+    }
+     printf("\n");
+   }
+     getchar();
+}
+
+```
+
+```c
+//长方形
+//******
+//******
+//******
+//******
+//******
+void main() {
+   for (int i = 1;i <= 5;i++){
+ 
+      for (int j = 1;j <= 5;j++){
+          printf("*");
+      }
+        printf("\n");
+   }
+     getchar();
+}
+//星号
+//*
+//**
+//***
+//****
+//*****
+void main() {
+   for (int i = 1;i <= 5;i++){
+ 
+      for (int j = 1;j <= i;j++){
+          printf("*");
+      }
+        printf("\n");
+   }
+     getchar();
+}
 
 
+//没有空格的金字塔 (2*i)-1 星号的数量
+//*
+//***
+//*****
+//*******
+//*********
+void main() {
+   for (int i = 1;i <= 5;i++){
+ 
+      for (int j = 1;j <= (2*i)-1;j++){
+          printf("*");
+      }
+        printf("\n");
+   }
+     getchar();
+}
+//金字塔 5-i=空格数
+//    *
+//   ***
+//  *****
+// *******
+//*********
+void main() {
+   for (int i = 1;i <= 5;i++){
+       for (int k = 1;k <= 5-i;k++){
+          printf(" ");
+      }
+      for (int j = 1;j <=(2*i)-1;j++){
+          printf("*");
+      }
+        printf("\n");
+   }
+     getchar();
+}
+
+//空心金字塔
+    *
+   * *
+  *   *
+ *     *
+*********
+
+void main() {
+   for (int i = 1;i <= 5;i++){
+       for (int k = 1;k <= 5-i;k++){
+          printf(" ");
+      }
+      for (int j = 1;j <=(2*i)-1;j++){
+          if(i==1 || i==5 || j == 1 || j == (2*i)-1){
+             printf("*");
+          }else{
+            printf(" ");
+            }
+      }
+        printf("\n");
+   }
+     getchar();
+}
 
 
+void main() {
+    //输入任意数字打印空心金字塔
+    int num =5;
+    printf("plase * num\n");
+    scanf("%d",&num);
+   for (int i = 1;i <= num;i++){
+       for (int k = 1;k <= num-i;k++){
+          printf(" ");
+      }
+      for (int j = 1;j <=(2*i)-1;j++){
+          if(i==1 || i== num || j == 1 || j == (2*i)-1){
+             printf("*");
+          }else{
+            printf(" ");
+            }
+      }
+        printf("\n");
+   }
+     getchar();
+     getchar();
+}
 
-
+```
 
 
 
