@@ -1415,7 +1415,246 @@ void main() {
 }
 
 ```
+## break 结束当前循环
+```c
+void main() {
+  
+    for(int i=0;i<5;i++){
+      for(int j=1;j<5;j++){
+        if(j==2){
+           break;
+        }
+        printf("i = %d\n",i);
+      }
+    }
+     getchar();
+}
 
+//i=0
+//i=1
+//i=2
+//i=3
+//i=4
+```
+1.登录验证，3次机会，输入hello 登录成功，否则显示还剩余几次机会
+```c
+void main() {
+     int channce = 3;
+     int j =3;
+     char name[10] = "";
+     for(int i=1;i<=3;i++){
+          printf("plase you name\n");
+          scanf("%s",name);
+          if(strcmp("hello",name) == 0){
+           printf("success");
+           break;
+          }else{
+              channce--;
+              printf("hai sheng %d ci\n",channce);
+            if(channce<=0){
+              break;
+            }
+          }
+     }
+       getchar();
+       getchar();
+}
+
+```
+
+## continue 结束本次循环
+```c
+void main() {
+   
+     for(int i=1;i<=5;i++){
+       if(i==3){
+         continue;
+       }
+       printf("%d\n",i);
+     }
+       getchar();
+}
+
+```
+1.从键盘输入数字，记录负数和正数的个数，输入0时退出循环
+```c
+void main() {
+   
+      int p = 0;//正数的个数
+      int n = 0;//负数的个数
+      int num = 0;
+      for (;;){//表示死循环，永远不退出
+      printf("plase enter  num\n");
+      scanf("%d",&num);
+        if(num == 0){
+          break;
+        }
+        if(num < 0){
+          n++;
+          continue;
+        }
+         if(num > 0){
+          p++;
+           continue;
+        }
+      }
+      printf("zheng shu ge shu= %d fu shu ge shu =  %d",p,n);
+    getchar();
+    getchar();
+}
+
+```
+2.100000人民币可以过多少个路口,50000以上收5%，以下收1000
+```c
+void main() {
+   int lukou = 0;
+    int tom = 100000;
+    while(1){
+      if(tom < 1000){
+        break;
+      }
+      if(tom>50000){
+        tom = tom *0.95;
+      }else{
+        tom = tom - 1000;
+      }
+      lukou++;
+
+    }
+    printf("100000 RMB ke yi jing guo %d ge lu kou\n,sheng yu %d RMB\n",lukou,tom);
+    getchar();
+}
+
+```
+
+## goto语句 和 return 语句 
+1.goto想去哪就去哪 goto lable
+```c
+void main() {
+printf("0000");
+goto lable1;
+printf("0000\n");
+
+printf("100000 RMB ke yi jing guo %d ge lu kou\n,sheng yu %d RMB\n",1,2);
+
+lable1:
+getchar();
+}
+
+```
+
+2.水仙花数
+```c
+void main() {
+for(int i=100;i<1000;i++){
+  //水仙花数 各个位数的3次方 相加 等于本身
+  int b = i / 100; //百位数
+  int s = i % 100 /10; //十位数
+  int g = i % 10; //个位数
+  if(g * g * g + s * s * s +b * b * b == i){
+        printf("%d is shui xian hua shu\n",i);
+  }
+}
+getchar();
+}
+
+```
+
+## enum枚举 
+
+```c
+enum DAY{
+  one=1,two ,three ,si ,wu ,liu,qi,ba,jiu
+}day;
+void main() {
+for(day = one;day<jiu;day++){
+  printf("%d\n",day);
+}
+getchar();
+}
+
+```
+
+## 函数
+解决传统方法代码冗余问题  
+不利于维护  
+引出函数
+
+完成某一功能的程序指令的集合  
+
+1.函数的递归实验
+
+```c
+//依次输出 n = 2, n = 3 , n = 4  
+//
+void getTest(int n){
+  if(n>2){
+    getTest(n-1);
+  }
+  printf("n = %d\n",n);
+}
+void main() {
+ 
+
+  getTest(4);
+  getchar();
+}
+```
+2.使用斐波拉系数,1,1,2,3,5,8,13给你一个整数，求出他的斐波拉系数
+```c
+int  getTest(int n){
+  if(n == 1|| n == 2 ){
+    return 1; 
+  }else{
+    return getTest(n - 1) + getTest(n - 2);
+  }
+  
+}
+void main() {
+ //使用斐波拉系数,1,1,2,3,5,8,13给你一个整数，求出他的斐波拉系数
+ //使用递归
+
+  int res =  getTest(7);
+  printf("res = %d\n",res);
+  getchar();
+}
+
+```
+
+3.已知f(1) = 3,f(n)=2*f(n-1)+1
+```c
+int  getTest(int n){
+ if(n == 1){
+   return 3;
+ }else{
+   return 2 * getTest(n-1) + 1;
+ }
+}
+void main() {
+  //已知f(1) = 3,f(n)=2*f(n-1)+1
+  int res =  getTest(7);
+  printf("res = %d\n",res);
+  getchar();
+}
+```
+4.猴子吃桃,吃一半 ，在多吃一个，第十天只剩一个，求一共有多少个桃子
+```c
+int  getTest(int n){
+ if(n == 10){
+   return 1;
+ }else{
+   return 2 * (getTest(n+1)+1);
+ }
+}
+void main() {
+  //猴子吃桃,吃一半 ，在多吃一个，第十天只剩一个，求一共有多少个桃子
+  //第九天 (1 + 1)*2
+  int res =  getTest(9);
+  printf("res = %d\n",res);
+  getchar();
+}
+
+```
 
 
 
