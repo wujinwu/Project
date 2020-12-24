@@ -1,4 +1,6 @@
+#include <stdio.h>
 
+int n = 100;
 
 int myCal(int n1,int n2,char oper){
    int n;
@@ -15,3 +17,5 @@ int myCal(int n1,int n2,char oper){
     }
          return n;
 }
+
+ 

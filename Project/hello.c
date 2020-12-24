@@ -1,19 +1,19 @@
 #include <stdio.h>
 #include <string.h>
-#include "p.c"
+#include <stdlib.h>
 
-int  getTest(int n){
- if(n == 10){
-   return 1;
- }else{
-   return 2 * (getTest(n+1)+1);
- }
-}
-void main() {
-  //猴子吃桃,吃一半 ，在多吃一个，第十天只剩一个，求一共有多少个桃子
-  //第九天 (1 + 1)*2
-  int res =  getTest(9);
-  printf("res = %d\n",res);
+int main() {
+
+  char str1[20] = "9999";
+  char str2[20] = "66.0";
+  char str3[20] = "bf";
+  //基本数据类型转字符串
+
+  int num1 = atoi(str1);
+  double num2 = atof(str2);
+  char num3 = str3[0];
+
+  printf("%d,%f,%c \n",num1,num2,num3);
   getchar();
 }
 

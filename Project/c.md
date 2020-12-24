@@ -1655,6 +1655,146 @@ void main() {
 }
 
 ```
+## 函数的值传递，和地址传递  
+1.地址传递效率高，值的传递 值的大小决定效率的高低，越大效率越低  
+2.地址传递/引用传递  默认的有指针和数组  
+3.值传递 默认的有基本数据类型，结构体，共用体，枚举类型 
+
+## 变量的作用域  
+1.函数的内部声明/局部变量,作用域只在函数内部生效  
+2.函数的局部变量，与全局变量相同，函数采用就近原则,取函数内部变量  
+3. 在一个代码块中,变量的作用域只在该代码块 有效
+4. 函数外部的变量--全局变量，作用域在整个程序有效
+
+## 变量初始化注意事项  
+1.局部变量 系统不会初始化 ， 必须程序员给其初始值，否则会异常退出  
+2. 全局变量 系统会自动初始化 int 0 char '/0' float 0.0 double 0.0   
+## 变量作用域  
+1.全局变量 保存在内存的全局存储中,占用静态存储单元，作用域整个程序  
+2.局部变量 保存在内存栈中  
+3.c程序规定，只能从变量作用域小向变量作用域的大寻找  
+4.同一作用域 变量名不能重复  
+5.代码块也有独立的作用域
+## C内存布局
+1.栈区---局部变量  
+2.堆区---函数动态分配的数据，放在堆  
+3.静态存储区/全局区--存储全局变量，静态变量  
+4.代码区--存放代码/指令  
+## static 关键字  
+1.局部变量加 static 关键字 -- 静态局部变量，自动初始化  
+2.静态局部变量存储在静态存储区,只会初始化一次,即使函数返回/销毁，它的值保持不变  
+```c
+void fn(){
+static int n = 3;
+printf("n = %d\n",n);
+n++;
+printf("n = %d\n",n);
+}
+void main() {
+  fn();// 3 ,4
+  printf("\n");
+  fn();//4,5
+  getchar();
+}
+```
+3.静态全局变量 -- 只能在当前文件使用,其他文件不能访问  使用了#include 可以访问
+
+
+## 常用字符串函数
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+//常用字符串函数 
+
+  char dest[50] = "cccc";
+  char desc[50] = " world";
+  //拷贝 替换前面的字符串
+  strcpy(dest,"hello");
+  printf("dest = %s\n",dest);
+  //获取字符串长度
+  printf("dest长度 = %d\n",strlen(dest));
+  //连接两个字符串
+  strcat(dest,desc);
+  printf("desc = %s\n",dest);
+  getchar();
+}
+```
+## 常用时间日期相关函数 time.h  
+```c
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+void getTest(){
+  for(int i= 0;i<100;i++){
+   for(int j= 0;j<100;j++){
+     printf("%d %d\n",i,j);
+  }
+  }
+}
+int main() {
+//常用 时间 日期 函数
+  time_t curtime,end_time; //time_t 结构体
+    time(&curtime);//完成初始化
+  double s;
+
+  //ctime(&curtime)返回一个当地的时间
+ // printf("%s\n",ctime(&curtime));
+   getTest();
+   time(&end_time);//完成初始化
+   s = difftime(end_time,curtime);
+   printf("%.3lf \n",s);
+  getchar();
+}
+``` 
+## 基本数据类型和字符串互转 
+```c
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+
+int main() {
+
+  char str1[20];
+  char str2[20];
+  char str3[20];
+  //基本数据类型转字符串
+  sprintf(str1,"%d",333);
+  sprintf(str2,"%.2f",333.6);
+  sprintf(str3,"%8.2f",333.66);
+  printf("str1 = %s str2 = %s str3= %s\n",str1,str2,str3);
+  getchar();
+}
+
+```
+
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+
+  char str1[20] = "9999";
+  char str2[20] = "66.0";
+  char str3[20] = "bf";
+  //基本数据类型转字符串
+
+  int num1 = atoi(str1);
+  double num2 = atof(str2);
+  char num3 = str3[0];
+
+  printf("%d,%f,%c \n",num1,num2,num3);
+  getchar();
+}
+
+```
+
+
+
+
+
 
 
 
