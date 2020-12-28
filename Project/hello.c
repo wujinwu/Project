@@ -1,19 +1,32 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
-
 int main() {
+//数组 
 
-  char str1[20] = "9999";
-  char str2[20] = "66.0";
-  char str3[20] = "bf";
-  //基本数据类型转字符串
+     char* c = "abc" ;
+     printf("%p\n",&c);//指针的地址
+     printf("%p\n",c);//指针的地址-- 指向的值
+     c = "cctv"; //指向的地址不变，改变指向地址中的值
 
-  int num1 = atoi(str1);
-  double num2 = atof(str2);
-  char num3 = str3[0];
-
-  printf("%d,%f,%c \n",num1,num2,num3);
-  getchar();
+     printf("%p\n",&c);//指针的地址
+     printf("%p\n",c);//指针的地址-- 指向的值
+    printf("%s\n",c);//指针的地址--> 指向的值(也是地址)--指向的值(地址--值)
+ /**
+  * 内存变化图
+  *         0x111         0x113  0x114  0x115   0x116
+  *        ________       ____________________ 
+  * str -->|0x112 |-----> | a    | b    |  c |   \0  |
+  *        --------       ---------------------
+  *     
+  * *       0x111         0x119  0x11a  0x11b  0x11c    0x11d
+  *        ________       ____________________ 
+  * str -->|0x118 |-----> | c   | c    |  t |    v    | \0  |
+  *        --------       ---------------------
+  *       
+  *       
+  * 
+  **/
+     getchar();
+ 
 }
 

@@ -1791,6 +1791,385 @@ int main() {
 
 ```
 
+## 预处理命令
+```c
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#if _WIN32 //如果是windows，调用windows.h
+#include <windows.h>
+#elif __linux__ //如果是linux，调用unistd.h
+#include <unistd.h>
+#endif
+int main() {
+  //预处理命令
+   #if _WIN32
+   Sleep(5000);//毫秒
+   #elif __linux__
+   sleep(5);//秒
+   #endif
+   printf("hello c world");
+   getchar();
+}
+```
+### 宏定义#define c语言预处理命令的一种,用一个标识符表示一个字符串，如果出现该标识符，那么全部替换成指定的 字符串
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#define N  100
+int main() {
+  //预处理命令
+   int c = 100 + N;
+   printf(" c  = %d",c);
+   getchar();
+}
+
+```
+### 宏定义案例
+```c
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#define N  (n*n+3*n)
+int main() {
+  //预处理命令
+  int sum,n;
+  printf("shu ru n\n");
+  scanf("%d",&n);
+   sum = 3*N+4*N+5*N;
+   printf(" sum  = %d",sum);
+   getchar();
+   getchar();
+}
+``` 
+1.宏定义注意事项，只是简单替换，包括if语句，函数，表达式,常量，字符串，在预处理的时候不被检查，如有错误，在编译已被宏展开后的源程序发现  
+2.要写在函数外，如要终止作用域，用undefine  
+3.如被双引号，则不会替换  
+4.允许嵌套,宏定义的字符串可以使用已被定义的宏，在宏展开后由预处理程序层层替换  
+5.宏名习惯大写字符表示  
+6.可用宏定义表示数据类型，使书写方便  
+7.宏定义与typedef的区别，宏定义只是简单的替换，由预处理器处理，而typedef是在编译阶段由编译器处理，它是给原有数据类型起一个新的名字，将他作为一个新的数据类型  
+8.宏定义不需要加分号,如加上分号则连分号一起替换  
+
+### 带参数的宏定义
+```c
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#define MAX(a,b) (a>b)?a:b
+int main() {
+  //预处理命令
+   int x,y;
+   printf("shu ru x , y\n");
+   scanf("%d %d",&x,&y);
+
+   printf("max = %d\n",MAX(x,y));
+   getchar();
+   getchar();
+}
+``` 
+1.带参数的宏定义不会为参数分配内存，所以不必带数据类型  
+2.带参宏调用:宏(实际参数)  
+
+### 带参数宏定义和函数的区别  
+1.宏 只是简单的替换，不会对表达式计算，宏在编译之前就被处理掉了，它没有机会参与编译,不会占用内存.  
+2.函数是一段会被重复使用的代码，会被编译，占用内存，每次调用函数，就是执行这块内存中的代码  
+```c
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#define MAX(a) (a)*(a)
+
+int getMax(int a){
+  int  max =(a)*(a);
+  return max;
+}
+int main() {
+  //预处理命令
+   int i = 1;
+   while(i<=5){
+   printf("%d^2 = %d\n",i,getMax(i++));
+   }
+   //函数运算
+// 2^2 = 1
+// 3^2 = 4
+// 4^2 = 9
+// 5^2 = 16
+// 6^2 = 25
+   printf("\n");
+   int a = 1;
+   while(a<=5){
+       printf("%d * %d = %d\n",a-2 , a - 1,MAX(a++));
+   }
+//宏定义运算
+// 1 * 2 = 2
+// 3 * 4 = 12
+// 5 * 6 = 30
+   getchar();
+}
+```
+# 数组  
+1.数组可用存放多个相同数据类型，是构造类型，传递是地址(指针传递)  
+```c
+#include <stdio.h>
+int main() {
+//数组
+   double hens[6];
+   hens[0] = 3.0;
+     hens[1] = 3.1;
+       hens[2] = 3.2;
+         hens[3] = 3.3;
+           hens[4] = 3.4;
+             hens[5] = 6;
+               hens[6] = 3.6;
+    double totalWeight = 0.0;
+    double avgWeight = 0.0;
+    // sizeof(hens)数组总大小
+    //sizeof(double);//返回一个double占用字节数
+    int  arrLen =  sizeof(hens)/sizeof(double);//数组个数
+    for (int i=0;i<arrLen;i++){
+      totalWeight+=hens[i];
+    }           
+    avgWeight = totalWeight / arrLen;
+    printf("arrLen = %d totalWeight = %lf , avgWeight = %lf"
+    ,arrLen,totalWeight,avgWeight);
+   getchar();
+}
+```
+```c
+#include <stdio.h>
+int main() {
+//数组
+   double hens[6];
+   hens[0] = 3.0;
+     hens[1] = 3.1;
+       hens[2] = 3.2;
+         hens[3] = 3.3;
+           hens[4] = 3.4;
+             hens[5] = 6;
+    double totalWeight = 0.0;
+    double avgWeight = 0.0;
+    // sizeof(hens)数组总大小
+    //sizeof(double);//返回一个double占用字节数
+    int  arrLen =  sizeof(hens)/sizeof(double);//数组个数
+    for (int i=0;i<arrLen;i++){
+      totalWeight+=hens[i];
+      printf("hens[%d] == %lf\n",i,hens[i]);
+      printf("address = %p\n",&hens[i]);//地址
+    }           
+    avgWeight = totalWeight / arrLen;
+    printf("arrLen = %d totalWeight = %lf , avgWeight = %lf",arrLen,totalWeight,avgWeight);
+   getchar();
+}
+```
+2.数组的3种初始化方式
+```c
+#include <stdio.h>
+int main() {
+//数组
+   double hens[6];
+   hens[0] = 3.0;
+     hens[1] = 3.1;
+       hens[2] = 3.2;
+   
+    double henss[3]= {1,2,3};
+    double hensss[]= {1,2,3,4};
+    getchar();
+}
+```
+### 注意事项,数组传递的是地址，操作数组变量会改变原数组 
+```c
+#include <stdio.h>
+void getHens(double hen[]){
+  hen[0] = 100;
+  hen[3] = 20;
+  hen[4] = 50;
+  hen[5] = 60;
+}
+int main() {
+//数组
+   char hens[26];
+   hens[0] = 3.0;
+     hens[1] = 3.1;
+       hens[2] = 3.2;
+   
+       getHens(hens);
+     int  arrLen =  sizeof(hens)/sizeof(double);//数组个数
+    for (int i=0;i<arrLen;i++){
+      printf("hens[%d] == %lf\n",i,hens[i]);
+      printf("address = %p\n",&hens[i]);//地址
+    } 
+    getchar();
+}
+```
+
+### 练习
+1.将A-Z放入数组，并显示
+```c
+#include <stdio.h>
+
+void getHens(char hen[]){
+ for(int i = 0;i < 26;i++){
+   hen[i] = 'A' + i;
+ }
+}
+int main() {
+//数组
+    char hens[26];
+    getHens(hens);
+     int  arrLen =  sizeof(hens)/sizeof(char);//数组个数
+    for (int i=0;i<arrLen;i++){
+      printf("hens[%d] == %c\n",i,hens[i]);
+      printf("address = %p\n",&hens[i]);//地址
+    } 
+    getchar();
+}
+```  
+2.取出数组的最大值，和最大值的下标
+```c
+#include <stdio.h>
+int main() {
+//数组
+    int  hens[6] = {1,2,3,100,5,66};
+    int  arrLen =  sizeof(hens)/sizeof(int);//数组个数
+    int max = 0;
+    int maxLeng = 0;
+    for (int i=0;i<arrLen;i++){
+     if(hens[i]>max){
+       max = hens[i];
+       maxLeng = i;
+     }
+    } 
+    printf("max = %d ,maxLeng = %d",max,maxLeng);
+    getchar();
+}
+```
+### 字符数组，用来存放字符的数组
+1.一系列字符的集合,也就是字符串  
+```c
+#include <stdio.h>
+int main() {
+//数组
+    char c[20] = {'a','b','c','d'};
+    printf("%s",c);
+    getchar();
+}
+```  
+### 字符串注意事项  
+1.字符串实际上是使用 null 字符 \0 终止的一维字符数组。因此，一个以 null 结尾的字符串，包含了组成字符串的字符。
+```c
+#include <stdio.h>
+int main() {
+//数组 '\0'结尾，后面字符不输出
+    char c[20] = {'t','o','m','\0','&','j','i','e'};
+    printf("%s",c);
+    getchar();
+}
+```
+```c
+#include <stdio.h>
+int main() {
+//数组 '\0'结尾，后面字符不输出
+    char c[] ={'c','c','t','v'};//cctv后乱码
+    printf("%s",c);
+    getchar();
+}
+
+#include <stdio.h>
+int main() {
+//数组 
+    char c[] ="cctv";//默认加\0
+    printf("%s",c);
+    getchar();
+}
+```  
+
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+//数组 
+     char* c = "cctv";//默认加\0
+     printf("%d \n",strlen(c));
+     printf("%s \n",c);
+
+     printf("%c",c[2]);
+     getchar();
+     
+}
+
+#include <stdio.h>
+#include <string.h>
+int main() {
+//数组 
+     char c[13] ;//c是常量，常量无法改变值(地址无法改变)
+    // c = "cctv"; //报错 //改变地址，错误
+     c[0] = 'c';//改变地址--指向的值--正确
+     printf("%d \n",strlen(c));
+     printf("%s \n",c);
+
+     printf("%c",c[2]);
+     getchar();
+}
+
+```
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+//数组 
+     char* c = "abc" ;
+     printf("%p\n",&c);//指针的地址
+     printf("%p\n",c);//指针的地址-- 指向的值
+     c = "cctv"; //指向的地址不变，改变指向地址中的值
+     printf("%p\n",&c);//指针的地址
+     printf("%p\n",c);//指针的地址-- 指向的值
+    printf("%s\n",c);//指针的地址--> 指向的值(也是地址)--指向的值(地址--值)
+     getchar();
+}
+```
+## 内存变化地址
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+//数组 
+
+     char* c = "abc" ;
+     printf("%p\n",&c);//指针的地址
+     printf("%p\n",c);//指针的地址-- 指向的值
+     c = "cctv"; //指向的地址不变，改变指向地址中的值
+
+     printf("%p\n",&c);//指针的地址
+     printf("%p\n",c);//指针的地址-- 指向的值
+    printf("%s\n",c);//指针的地址--> 指向的值(也是地址)--指向的值(地址--值)
+ /**
+  * 内存变化图
+  *         0x111         0x113  0x114  0x115   0x116
+  *        ________       ____________________ 
+  * str -->|0x112 |-----> | a    | b    |  c |   \0  |
+  *        --------       ---------------------
+  *     
+  * *       0x111         0x119  0x11a  0x11b  0x11c    0x11d
+  *        ________       ____________________ 
+  * str -->|0x118 |-----> | c   | c    |  t |    v    | \0  |
+  *        --------       ---------------------
+  *       
+  *       
+  * 
+  **/
+     getchar();
+ 
+}
+```
+
+
+
+
+
+
 
 
 
