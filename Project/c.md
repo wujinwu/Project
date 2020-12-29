@@ -2165,6 +2165,343 @@ int main() {
 }
 ```
 
+### 字符串相关的函数  
+1	void *memchr(const void *str, int c, size_t n)
+在参数 str 所指向的字符串的前 n 个字节中搜索第一次出现字符 c（一个无符号字符）的位置。  
+2	int memcmp(const void *str1, const void *str2, size_t n)
+把 str1 和 str2 的前 n 个字节进行比较。  
+3	void *memcpy(void *dest, const void *src, size_t n)
+从 src 复制 n 个字符到 dest。  
+4	void *memmove(void *dest, const void *src, size_t n)
+另一个用于从 src 复制 n 个字符到 dest 的函数。  
+5	void *memset(void *str, int c, size_t n)
+复制字符 c（一个无符号字符）到参数 str 所指向的字符串的前 n 个字符。  
+6	char *strcat(char *dest, const char *src)
+把 src 所指向的字符串追加到 dest 所指向的字符串的结尾。  
+7	char *strncat(char *dest, const char *src, size_t n)
+把 src 所指向的字符串追加到 dest 所指向的字符串的结尾，直到 n 字符长度为止。  
+8	char *strchr(const char *str, int c)
+在参数 str 所指向的字符串中搜索第一次出现字符 c（一个无符号字符）的位置。  
+9	int strcmp(const char *str1, const char *str2)
+把 str1 所指向的字符串和 str2 所指向的字符串进行比较。  
+10	int strncmp(const char *str1, const char *str2, size_t n)
+把 str1 和 str2 进行比较，最多比较前 n 个字节。  
+11	int strcoll(const char *str1, const char *str2)
+把 str1 和 str2 进行比较，结果取决于 LC_COLLATE 的位置设置。  
+12	char *strcpy(char *dest, const char *src)
+把 src 所指向的字符串复制到 dest。  
+13	char *strncpy(char *dest, const char *src, size_t n)
+把 src 所指向的字符串复制到 dest，最多复制 n 个字符。  
+14	size_t strcspn(const char *str1, const char *str2)
+检索字符串 str1 开头连续有几个字符都不含字符串 str2 中的字符。  
+15	char *strerror(int errnum)
+从内部数组中搜索错误号 errnum，并返回一个指向错误消息字符串的指针。  
+16	size_t strlen(const char *str)
+计算字符串 str 的长度，直到空结束字符，但不包括空结束字符。  
+17	char *strpbrk(const char *str1, const char *str2)
+检索字符串 str1 中第一个匹配字符串 str2 中字符的字符，不包含空结束字符。也就是说，依次检验字符串 str1 中的字符，当被检验字符在字符串 str2 中也包含时，则停止检验，并返回该字符位置。  
+18	char *strrchr(const char *str, int c)
+在参数 str 所指向的字符串中搜索最后一次出现字符 c（一个无符号字符）的位置。  
+19	size_t strspn(const char *str1, const char *str2)
+检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标。  
+20	char *strstr(const char *haystack, const char *needle)
+在字符串 haystack 中查找第一次出现字符串 needle（不包含空结束字符）的位置。  
+21	char *strtok(char *str, const char *delim)
+分解字符串 str 为一组字符串，delim 为分隔符。  
+22	size_t strxfrm(char *dest, const char *src, size_t n)
+根据程序当前的区域选项中的 LC_COLLATE 来转换字符串 src 的前 n 个字符，并把它们放置在字符串 dest 中。  
+
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+
+   char str1[12] = "Hello";
+   
+   char str2[12] = "Wrold";
+   char str3[12];
+
+   //  memcpy(str1,str2,1);//从str2复制5个字符到str1,str1被替换  
+   //  strcat(str1,str2);//把str2追加到str1尾部
+  // strcpy(str1,str2,1);//把str2复制到str1,str1被替换
+  strncpy(str1,str2,1);//把str2前n个字符复制到str1,str1被替换
+     printf("str1 = %s",str1);
+     getchar();
+ 
+}
+```
+
+## 冒泡排序 
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+
+void getbubbleSort(int maoPaos[],int strLens){
+   int t;
+   int i=0;
+   for( i=0;i<strLens-1;i++){
+      for(int j=0;j < strLens-1-i ;j++){
+            if(maoPaos[j] > maoPaos[j+1]){
+              t = maoPaos[j+1];
+              maoPaos[j+1] = maoPaos[j];
+              maoPaos[j] = t;
+            }
+      }
+   }
+}
+
+int main() {
+//冒泡排序
+ /**
+  * {3,9,-1,10,-2}
+  * 第一轮排序  最大数10就到最后了
+  * 1.{3,9,-1,10,-2}//3与9比较
+  * 2.{3,-1,9,10,-2}//9和-1比较
+  * 3.{3,-1,9,10,-2}//9和10比较
+  * 4.{3,-1,9,-2,10}//10和-2比较
+  * 
+  * 第二轮排序  第二大的数位置已经找好了
+  * 1.{-1,3,9,-2,10}//3与-1比较
+  * 2.{-1,3,9,-2,10}//3与9比较
+  * 3.{-1,3,-2,9,10}//9与-2比较
+  * 
+  * 第三轮排序 第三大的数位置已经找好了
+  * 1.{-1,3,-2,9,10}//-1与3比较
+  * 2.{-1-2,3,9,10}//3与-2比较
+  * 
+  * 第四轮排序 第四大的数位置已经找好了
+  * 1.{-2,-1,3,9,10}//-1与-2比较
+  * 
+  * 排序结束
+  **/
+      int maoPao[]={30000,900,1,100,200,50,8,100};
+      int strLen = sizeof(maoPao)/sizeof(int);
+      getbubbleSort(maoPao,strLen);
+
+      for(int i=0;i<strLen;i++){
+         printf("%d,",maoPao[i]);
+      }
+      getchar();
+}
+
+```  
+## 数组查找 
+1.顺序查找 
+```c
+#include <stdio.h>
+#include <string.h>
+
+
+int seqSearch(int maoPao[],int strLen){
+      int m ;
+      scanf("%d",&m);
+      for(int i=0;i<strLen;i++){
+         if(m == maoPao[i]){
+           return m;
+         }
+      }
+      return -1;
+}
+
+int main() {
+           //顺序查找
+           int maoPao[]={30000,900,1,100,200,50,8,100};
+           int strLen = sizeof(maoPao)/sizeof(int);
+           int m =  seqSearch(maoPao,strLen);
+           if(m == -1){
+                printf("没有找到");
+           }else{
+                printf("找到了 位置是%d",m);
+           }
+           getchar();
+           getchar();
+}
+
+```
+2.二分查找法
+```c
+#include <stdio.h>
+#include <string.h>
+
+
+int bindSearch(int maoPao[],int minLen,int maxLen,int m){
+      //二分查找前提 是一个有序数组
+      //要找一个数m
+      //先找中间数mCenter,m>mCenter 在右边找，反之，左边找
+       int mCenter = (minLen + maxLen) / 2;
+       int mSum =  maoPao[mCenter];
+       if(m>maoPao[maxLen]||m<maoPao[minLen]){
+          //如果大于最大数和小于最小数
+          return -1;
+       }
+       //or
+      //  if(minLen>maxLen){
+      //    //如果最小下标大于最大下标
+      //     return -1;
+      //  }
+       if(m > mSum){
+          bindSearch(maoPao,mCenter+1,maxLen,m);
+       }else if(m < mSum){
+           bindSearch(maoPao,minLen,mCenter-1,m);
+       }else if(mSum == m){
+          return mCenter;
+       }else{
+          return -1;
+       }
+
+}
+
+int main() {
+           //顺序查找
+           int maoPao[]={1,2,3,4,6,8,9,11};
+           int strLen = sizeof(maoPao)/sizeof(int);
+           int m ;
+           scanf("%d",&m);
+           int mu = bindSearch(maoPao,0,strLen,m);
+           if(mu == -1){
+                printf("没有找到");
+           }else{
+                printf("找到了 位置是%d",mu);
+           }
+           getchar();
+           getchar();
+}
+``` 
+## 二维数组  
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+           //二维数组 4行6列的二维数组
+           int a[4][6];
+           for(int i=0;i<4;i++){
+              for (int j = 0; j < 6; j++){
+                 a[i][j] = i+j;
+                 printf("a[%d][%d]=%d  ",i,j,a[i][j]);
+              }
+              printf("\n");
+           }
+           getchar();
+}
+```  
+1.二维数组内存分布
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+           //二维数组 4行6列的二维数组
+           int a[4][6];
+           for(int i=0;i<4;i++){
+              for (int j = 0; j < 6; j++){
+                 a[i][j] = i+j;
+                 printf("a[%d][%d]=%d  ",i,j,a[i][j]);
+              }
+              printf("\n");
+           }
+           printf("a的地址 %p\n",&a);
+           printf("a[0]的地址 %p\n",&a[0]);
+           printf("a[0][0]的地址 %p\n",&a[0][0]);
+           printf("a[0][1]的地址 %p\n",&a[0][1]);
+           printf("a[1]的地址 %p\n",&a[1]);
+           getchar();
+           /**
+            *a[0][0]=0  a[0][1]=1  a[0][2]=2  a[0][3]=3  a[0][4]=4  a[0][5]=5
+            *a[1][0]=1  a[1][1]=2  a[1][2]=3  a[1][3]=4  a[1][4]=5  a[1][5]=6
+            *a[2][0]=2  a[2][1]=3  a[2][2]=4  a[2][3]=5  a[2][4]=6  a[2][5]=7
+            *a[3][0]=3  a[3][1]=4  a[3][2]=5  a[3][3]=6  a[3][4]=7  a[3][5]=8
+            *a的地址 0061FEB8
+            *a[0]的地址 0061FEB8
+            *a[0][0]的地址 0061FEB8
+            *a[0][1]的地址 0061FEBC
+            *a[1]的地址 0061FED0
+            * 
+            **/
+}
+
+```  
+2.遍历二维数组
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+        //二维数组 4行6列的二维数组
+        int map[3][4]={{0,0,0,100},{1,1,1,200},{2,2,2,300}};
+        //sizeof(map)数组的大小 9*4=36
+        //sizeof(map[0]) 第一行的大小 3 + 4 =12
+        int rows = sizeof(map)/sizeof(map[0]);
+        printf("行大小 rows = %d\n",rows);//行大小
+        int cols = sizeof(map[0])/sizeof(map[0][0]);
+        printf("列大小 cols = %d\n",cols);//列大小
+        //遍历二维数组
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+              printf("map[%d][%d]=[%d] ",i,j,map[i][j]);
+            }
+            printf("\n");
+        }
+        getchar();
+}
+```  
+## 指针
+1.指针的自增
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+           //二维数组 4行6列的二维数组
+           int map[3]={0,0,0};
+           int *ptr;
+           ptr = map;
+            for(int i=0;i<3;i++){
+              printf("var[%d]的地址=%p\n",i,ptr);
+              printf("存储值var[%d]的值=%d\n",i,*ptr);
+              ptr++;
+            }
+           getchar();
+           /**
+            * var[0]的地址=0061FF0C
+            *存储值var[0]的值=0
+            *var[1]的地址=0061FF10
+            *存储值var[1]的值=0
+            *var[2]的地址=0061FF14
+            *存储值var[2]的值=0
+            * 
+            **/
+    
+}
+``` 
+2.指针的自减
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+           //二维数组 4行6列的二维数组
+           int map[3]={100,10,0};
+           int *ptr;
+           ptr = &map[2];
+            for(int i=3;i>0;i--){
+              printf("var[%d]的地址=%p\n",i,ptr);
+              printf("存储值var[%d]的值=%d\n",i,*ptr);
+              ptr--;
+            }
+           getchar();
+           /**
+            *var[3]的地址=0061FF14
+            *存储值var[3]的值=0
+            *var[2]的地址=0061FF10
+            *存储值var[2]的值=10
+            *var[1]的地址=0061FF0C
+            *存储值var[1]的值=100
+            * 
+            **/
+    
+}
+``` 
+
+
+
 
 
 
