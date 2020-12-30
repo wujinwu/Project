@@ -2499,11 +2499,282 @@ int main() {
     
 }
 ``` 
+### 指针的比较  == >  >=  <  <=  
+1.指针的比较案例1
+```c
+#include <stdio.h>
+#include <string.h>
+int main() {
+  //指针的比较
+    int arr[3] = {1,10,100};
+    int *ptr;
+    ptr = arr;
+    // if(ptr == arr[0]){//错误，类型不匹配
+    //     printf("\nok")
+    // }
+    if(ptr == &arr[0]){//正确
+      printf("ptr == &arr[0] ok\n");
+    }
+     if(ptr == arr){//正确 
+      printf("ptr == var ok\n");
+    }
+
+    if(ptr <= &arr[1]){//正确
+      printf("ptr  <= &arr[1] ok\n");
+    }
+    printf("*ptr = %d \n",*ptr); //*ptr = 1
+           getchar();   
+}
+```
+2.指针的比较案例2
+```c
+#include <stdio.h>
+#include <string.h>
+const int MAX  = 3;
+int main() {
+  //指针的比较
+    int arr[3] = {1,10,100};
+    int i, *ptr;
+    ptr = arr;
+    while(ptr <= &arr[MAX - 2]){
+      printf("address arr[%d] = %p\n",i,ptr);
+      printf("value arr[%d] = %d\n",i,*ptr);
+      i++;
+      ptr++;
+    }
+           getchar();
+  
+```
+
+### 指针数组 
+1.要让数组的元素  指向其他类型元素的地址[指针] 就可以使用指针数组  
+2.(数据类型)int (数组名)*ptr[10(数组大小)] int指针数组
+3.内存变化及案例演示
+```c
+#include <stdio.h>
+#include <string.h>
+const int MAX  = 3;
+int main() {
+   //指针数组
+    int arr[3]={1,10,100};
+    int *ptr[3];
+    for(int i=0;i<MAX;i++){
+        ptr[i] = &arr[i];
+    }
+    for(int i=0;i<MAX;i++){
+      printf("ptr[%d] = %d\n",i,*ptr[i]);
+      printf("ptr[%d] 本身的地址 %p\n",i,&ptr[i]);
+      printf("ptr[%d] 指向的地址 %p\n",i,ptr[i]);
+    }
+
+     /**
+    * 
+    *ptr[0] = 1
+    *ptr[0] 本身的地址 0061FF00
+    *ptr[0] 指向的地址 0061FF0C
+    *ptr[1] = 10
+    *ptr[1] 本身的地址 0061FF04
+    *ptr[1] 指向的地址 0061FF10
+    *ptr[2] = 100
+    *ptr[2] 本身的地址 0061FF08
+    *ptr[2] 指向的地址 0061FF14
+  * 内存图
+  *   *       0061FF0C  0061FF10  0061FF14  
+  *           _______________________________
+  * arr----> | 1    |    10    |      100    |
+  *           -------------------------------
+  * 
+  * 
+  *             0061FF00  0061FF04  0061FF08   
+  *            ____________________________ 
+  * ptr ----> | 0061FF0C |0061FF10 |0061FF14|
+  *             ---------------------
+  *        
+  * 
+  **/
+    getchar(); 
+}
+
+```
+4.定义一个指针数组，该数组的每个元素，指向的是一个字符串
+```c
+#include <stdio.h>
+#include <string.h>
+const int MAX  = 3;
+int main() {
+   //定义一个指针数组，该数组的每个元素，指向的是一个字符串
+    char *ptr[]={"水浒传","西游记","红楼梦"};
+    
+    for(int i=0;i<MAX;i++){
+      //ptr[i]不需要加*号,字符串 本身就是指针类型
+      printf("ptr[%d] = %s\n",i,ptr[i]);
+      printf("ptr[%d] = %p\n",i,ptr[i]);
+      printf("ptr[%d] = %p\n",i,&ptr[i]);
+    }
+    getchar(); 
+}
+```  
+### 多级指针 
+1.指向指针的指针 int **ptr  
+```c
+#include <stdio.h>
+#include <string.h>
+const int MAX  = 3;
+int main() {
+   //多重指针
+   int ***ptrss;
+   int **ptrs;
+   int *ptr;
+   int p = 10;
+   ptr = &p;
+   ptrs = &ptr;
+   ptrss = &ptrs;
+   printf("ptrs = %d\n",**ptrs);//p的值       10
+   printf("ptrs = %p\n",*ptrs); //p的地址     0061FF14
+   printf("ptrs = %p\n",ptrs);  //ptr的地址   0061FF18
+   printf("ptrs = %p\n",&ptrs);  //ptrs的地址 0061FF1C
+
+   printf("ptrss指向的地址 = %p\n",ptrss); 
+   printf("ptrss本身的地址 = %p\n",&ptrss); 
+   printf("ptrss指向的值 = %d\n",***ptrss); 
+   getchar(); 
+}
+```  
+### 传递指针给函数  
+```c
+#include <stdio.h>
+#include <string.h>
+
+double getAvg(int *arr,int size);
+int main() {
+    int arr[5]={1,2,3,4,8};
+    double avg= getAvg(arr,5);
+    printf("avg = %lf",avg);
+   getchar(); 
+}
+double getAvg(int *arr,int size){
+   double avg;
+   double total;
+   for(int i=0;i<size;i++){
+      total += *arr;
+      printf("arr = %p\n",arr);//arr地址改变
+      arr++;//地址+1，指向下一个元素的地址 
+   }
+   avg = total / size;
+  return avg;
+}
+double getAvg2(int *arr,int size){
+   double avg;
+   double total;
+   for(int i=0;i<size;i++){
+    //arr[0] = arr + 0
+    //arr[1] = arr + 1(int的字节数 4)
+    //arr[2] = arr + 2(int的字节数 8)
+    //arr本身地址不变，只是加上字节数赋值给arr[2]
+      total += arr[i];
+      printf("arr = %p\n",arr);//arr地址不变
+   }
+   avg = total / size;
+  return avg;
+}
 
 
+```
+### 返回指针函数 
+```c
+#include <stdio.h>
+#include <string.h>
 
+char *strgetAvg(char *arr,char *arr2);
+int main() {
+  char *arr=strgetAvg("he","hello");
+  printf("%s",arr);
+   getchar(); 
+}
+char *strgetAvg(char *arr,char *arr2){
+  //返回较长的字符串 
+  if(strlen(arr)>strlen(arr2)){
+    return arr;
+  }else{
+    return arr2;
+  }
+}
 
+```
 
+1.返回指针函数细节
+```c
+#include <stdio.h>
+#include <string.h>
+
+int *func();
+int main() {
+   int *p = func();
+   printf("n = %d",*p);//报错，异常
+   getchar(); 
+}
+// int *func(){
+     //因为函数栈内存被弃用,所以报错，异常
+//  int n = 100;
+//  return &n;
+// }
+
+int *func(){
+  
+//但是如果使用静态变量，就不会被弃用
+ static int n = 100;
+ return &n;
+}
+```
+2.函数返回 一维数组指针
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+int *func();
+int main() {
+   int *p = func();//指向arr数组第一个元素的地址
+   for(int i=0;i<10;i++){
+     printf("%d\n",*(p+i));
+   }
+   getchar(); 
+}
+
+int *func(){  
+//返回一个一维数组
+ static int arr[10];
+ for(int i=0;i<10;i++){
+   arr[i] = rand();//随机数
+ }
+ return arr;
+}
+```  
+### 函数指针  -- 指向函数的指针 
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int func(int a,int b);
+int main() {
+  //函数指针
+   int (*p)(int,int) = func;//指向arr数组第一个元素的地址
+   int a = (*p)(30,4);
+   printf("%d\n",a);
+   printf("pmax指向的地址 %p\n",p);
+   printf("pmax本身的地址 %p\n",&p);
+   getchar(); 
+}
+
+int func(int a,int b){  
+//返回一个一维数组
+    if(a>b){
+      return a;
+    }else{
+      return b;
+    }
+}
+```  
 
 
 
