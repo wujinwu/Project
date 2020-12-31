@@ -1,4 +1,5 @@
-# c语言笔记
+# c语言笔记 
+[学习地址](https://www.bilibili.com/video/BV1qJ411z7Hf?p=149)
 **1.hello world 输出**
 ```c
 printf("hello world");
@@ -2775,7 +2776,341 @@ int func(int a,int b){
     }
 }
 ```  
+### 回调函数
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
+int getNextRand(void);
+void initArray(int *array,int arraySize,int (*f)(void));
+int main() {
+  //回调函数
+   int array[10];
+   initArray(array,10,getNextRand);
+    for(int i=0;i<10;i++){
+    printf("%d\n",array[i]);
+  }
+   getchar(); 
+}
+
+//f是回调函数，f是函数指针,f被initArray调用
+void initArray(int *array,int arraySize,int (*f)(void)){
+  for(int i=0;i<arraySize;i++){
+     array[i] = (*f)();
+  //array[i] = f();//两种方法
+  }
+}
+
+int getNextRand(void){
+   return rand();
+}
+``` 
+## 空指针的使用
+1.给指针赋值NULL值,就是一个空指针  
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+int main() {
+  //空指针
+   int *p = NULL;
+   int num =99;
+   p = &num;
+   printf("*p=%d",*p);
+   getchar(); 
+}
+```  
+## 动态内存分配 
+1.#include <stdlib.h> 中的函数  
+
+void *malloc(size_t size)
+分配所需的内存空间，并返回一个指向它的指针。
+malloc(100) 在堆区开辟一个100字节的空间，返回第一个字节的首地址
+
+void *calloc(size_t nitems, size_t size)
+分配所需的内存空间，并返回一个指向它的指针。
+分配空间大，可用存储数组，返回第一个字节的首地址 
+
+void free(void *ptr)
+释放之前调用 calloc、malloc 或 realloc 所分配的内存空间。
+
+void *realloc(void *ptr, size_t size)
+尝试重新调整之前调用 malloc 或 calloc 所分配的 ptr 所指向的内存块的大小。
+
+### void * 指向的是纯地址，不表示类型,不能用*p来取得值
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+   void check(int*);
+int main() {
+  //void *
+    int *p;
+    //在堆区分配一个 5 * sizeof(int) 内存,
+    //并返回首地址,并将(void *) 转成(int *)
+    p = (int *)malloc(5 * sizeof(int));
+    for(int i=0;i<5;i++){
+      //给堆区内存地址赋值,
+      //p+0首地址,p+1 第二个地址,p+2第三个地址
+       scanf("%d",p+i);
+    }
+    //输出小于60的值
+    check(p);
+    //回收堆内存
+    free(p);
+   getchar();
+   getchar(); 
+}
+
+   void check(int *p ){
+     printf("p的地址%p\n",p);
+     for(int i=0;i<5;i++){
+       if(p[i]<60){
+         printf("%d\n",p[i]);
+       }
+     }
+   }
+```
+### 分配堆内存注意事项
+1.避免分配小内存块,分配多个小内存，比分配几个大内存,系统开销大
+2.仅在需要时分配，并要即使释放  
+3.分配动态内存，需要遵守谁分配，谁释放
+
+## 结构体和公用体
+1.结构体案例,养猫，问题，一个猫白色，叫小白，2岁，一个猫 黄色，叫小黄，10岁   
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+  //结构体
+ struct Cat
+ {
+  char *name; //姓名
+  int age;    //年龄
+  char *color;//颜色
+ };
+ struct Cat cat1;
+ struct Cat cat2;
+ cat1.name = "小白";
+ cat1.age = 2;
+ cat1.color = "白色";
+
+ cat2.name = "小黄";
+ cat2.age = 10;
+ cat2.color = "黄色";
+ printf("第一只猫名字为%s,今年%d岁,是一只%s的猫\n",cat1.name,cat1.age,cat1.color);
+ printf("第二只猫名字为%s,今年%d岁,是一只%s的猫\n",cat2.name,cat2.age,cat2.color);
+ 
+ getchar(); 
+}
+```  
+2.结构体为自定义数据类型,表示一种数据类型  
+3.结构体变量代表一个具体变量,比如 int num
+4.结构体变量内存布局  
+![结构体内存图](结构体内存图.png)
+5.细节，没有初始化结构体 成员变量，会异常退出
+
+### 创建结构体的第二种方式
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+  //创建结构体的第二种方式
+ struct Cat{
+  char *name; //姓名
+  int age;    //年龄
+  char *color;//颜色
+ } cat1,cat2;
+```
+### 匿名结构体  第三种方式
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+  //匿名结构体 只能使用cat1,和cat2
+ struct {
+  char *name; //姓名
+  int age;    //年龄
+  char *color;//颜色
+ } cat1,cat2;
+ cat1.name = "小白";
+ cat1.age = 2;
+ cat1.color = "白色";
+
+ cat2.name = "小黄";
+ cat2.age = 10;
+ cat2.color = "黄色";
+ printf("第一只猫名字为%s,今年%d岁,是一只%s的猫\n",cat1.name,cat1.age,cat1.color);
+ printf("第二只猫名字为%s,今年%d岁,是一只%s的猫\n",cat2.name,cat2.age,cat2.color);
+ 
+ getchar(); 
+}
+```
+### 结构体 变量 赋值的3种方式
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+  //结构体 变量 赋值的3种方式
+ struct Cat{
+  char *name; //姓名
+  int age;    //年龄
+  char *color;//颜色
+ } cat1{"小白",2,"白色"},cat2{"小黄",10,"黄色"};
+ printf("第一只猫名字为%s,今年%d岁,是一只%s的猫\n",cat1.name,cat1.age,cat1.color);
+ printf("第二只猫名字为%s,今年%d岁,是一只%s的猫\n",cat2.name,cat2.age,cat2.color);
+ struct Cat cat4={"小白3",22,"白色3"};
+ printf("第3只猫名字为%s,今年%d岁,是一只%s的猫\n",cat4.name,cat4.age,cat4.color);
+ struct Cat cat5;
+ cat5.name = "小白";
+ cat5.age = 2;
+ cat5.color = "白色";
+ getchar(); 
+}
+```
+### 结构体的应用案例
+1.创建一个Dog的结构体，有姓名，年龄，体重,创建一个say函数,并全部使用字符串输出
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+ struct Dog{
+  char *name; //姓名
+  int age;    //年龄
+  char weight;//体重
+ } ;
+char* say(struct Dog dog){
+ static char info[50];//字符数组是指针(地址)传递
+ sprintf(info,"name =%s age=%d,weght=%d",dog.name,dog.age,dog.weight);
+ return info;
+};
+
+int main() {
+ struct Dog dog ;
+ dog.name="八万";
+ dog.age= 11;
+ dog.weight = 30;
+ char *dos = say(dog);
+ printf("%s",dos);
+ getchar();
+}
+```c  
+2.定义一个结构体BOX,长宽高，定义一个函数获取体积
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+ struct BOX{
+  int lenght; //长
+  int weight;    //宽
+  int height;//高
+  int volume;//体积
+ } ;
+
+ int getVolume(int lenght,int weight,int height){
+  return lenght*weight*height;
+ }
+
+int main() {
+ struct BOX box;
+ printf("请输入BOX的长度\n");
+ scanf("%d",&box.lenght);
+ printf("请输入BOX的宽\n");
+ scanf("%d",&box.weight);
+ printf("请输入BOX的高\n");
+ scanf("%d",&box.height);
+ box.volume = getVolume(box.lenght,box.weight,box.height);
+ printf("box的长度为%d,宽为%d,高为%d,体积为%d",box.lenght,box.weight,box.height,box.volume);
+ getchar();
+ getchar();
+}
+
+```
+3.景区门票案例,根据年龄收取门票，创建结构体Visitor,大于18岁收取门票，其他不收，输入N退出
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+ struct Visitor{
+  char name[10];
+  int age; //年龄
+  double pay;    //门票
+ } ;
+
+ //因为结构体 是值传递，会拷贝一份完整数据，
+ //效率较低，我们直接指针传递
+ void ticket(struct Visitor *v){
+      if(v->age>18){
+       v->pay=20.0;
+      }else{
+       v->pay=0.0;
+      }
+ };
+ 
+int main() {
+ struct Visitor v;
+  while(1){
+    printf("请输入游客名字\n");
+    scanf("%s",v.name);
+    if(!strcmp(v.name,"N")){
+      break;
+    }
+    printf("请输入游客年龄\n");
+    scanf("%d",&v.age);
+    ticket(&v);
+    printf("门票费%.2lf\n",v.pay);
+
+  }
+
+ 
+ printf("退出程序");
+ getchar();
+ getchar();
+}
+
+```  
+## 共用体
+1.共用体干什么, 有两个结构体，分为老师和学生，老师有姓名，年龄，薪水，学生有姓名，年龄，分数,分别创建两个结构体,比较浪费空间，所以就有了共用体 
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+ //共用体 共用体所有的成员共用一个内存,
+ //该空间的大小以占用最大的变量为准
+ //改变一个变量，其他变量也会一起改变
+union Person{
+  int c;
+  char age;  
+  int x;
+};
+int main() {
+union Person p;
+printf("%d ,%d\n",sizeof(p),sizeof(union Person));
+p.c =  99;
+printf("%d,%c,%d\n",p.c,p.age,p.x);
+p.age = 'b';
+printf("%d,%c,%d\n",p.c,p.age,p.x);
+p.x = 99;
+printf("%d,%c,%d\n",p.c,p.age,p.x);
+// 4,4
+// 99,c,99
+// 98,b,98
+// 99,c,99
+ getchar();
+}
+
+```
 
 
 
