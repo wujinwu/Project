@@ -1,6 +1,7 @@
 {
     "git.enableCommitSigning": true,
     "files.associations": {
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "cstdlib": "c"
     }
 }

@@ -3081,6 +3081,60 @@ int main() {
 ```  
 ## 共用体
 1.共用体干什么, 有两个结构体，分为老师和学生，老师有姓名，年龄，薪水，学生有姓名，年龄，分数,分别创建两个结构体,比较浪费空间，所以就有了共用体 
+
+```c
+//上面题目的案例演示
+//结构体和共用体的 案例演示
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+union MYUNION
+{
+  float score;//分数
+  double salary;//薪水
+};
+
+//姓名，年龄，薪水，学生有姓名，年龄，分数
+struct Person{
+ char name[10];
+ int age;
+ char profession;
+ union MYUNION sc;
+};
+int main() {
+
+ struct Person perror[2];
+ for(int i=0;i<2;i++){
+   printf("请输入姓名，年龄，职业 学生s 老师随意字符，空格隔开\n");
+   scanf("%s %d %c",perror[i].name,&perror[i].age,&perror[i].profession);
+   if(perror[i].profession == 's'){
+     printf("请输入学生分数\n");
+     scanf("%f",&perror[i].sc.score);
+   }else{
+     printf("请输入老师薪水\n");
+     scanf("%lf",&perror[i].sc.salary);
+   }
+   fflush(stdin);//刷新
+ }
+ for(int i=0;i<2;i++){
+
+   if(perror[i].profession == 's'){
+      printf("职业学生 姓名=%s 年龄=%d ",perror[i].name,perror[i].age);
+      printf("学生分数%f\n",perror[i].sc.score);
+   }else{
+     printf("职业老师 姓名=%s 年龄=%d ",perror[i].name,perror[i].age);
+     printf("老师薪水 %lf\n",perror[i].sc.salary);
+   }
+   
+ }
+ getchar();
+ getchar();
+}
+
+```
+4.结构体变量内存布局  
+![共用体内存图](共用体内存图.png)
 ```c
 #include <stdio.h>
 #include <string.h>
@@ -3111,10 +3165,196 @@ printf("%d,%c,%d\n",p.c,p.age,p.x);
 }
 
 ```
+## 记账软件记账软件 
+1.记账软件版本1
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+ //1.显示菜单
+  char exit;
+  int exit_loop = 1;
+  int key;//表示用户输入的菜单
+  int loop = 1;
+  double money=0.0;//收支金额
+  double balance =1000.0;//账号余额
+  char note[20]; //说明
+  char details[1000] = "收支\t金额\t\t余额\t\t说明";//明细
+  char temp[100]; //
+    do{
+     printf("------家庭收支记账软件------\n");
+     printf("\t1.收支明细\n");
+     printf("\t2.登记收入\n");
+     printf("\t3.登记支出\n");
+     printf("\t4.退出\n");
+     printf("\t请选择1-4:\n");
+     scanf("%d",&key);
+     getchar();
+      switch (key){
+      case 1:
+          printf("收支明细\n");
+          printf("%s\n",details);
+        break;
+       case 2:
+          printf("本次收入金额\n");
+          scanf("%lf",&money);
+          getchar();//过滤回车
+          printf("本次收入说明\n");
+          scanf("%s",note);
+          balance += money;
+          sprintf(temp,"\n收入\t%.1f\t\t%.1f\t\t%s",money,balance,note);//将本次信息写入到temp
+          strcat(details,temp);//将信息拼接到details
+        break;
+        case 3:
+           printf("本次支出金额\n");
+          scanf("%lf",&money);
+          getchar();//过滤回车
+          if(balance<money){
+            printf("余额不足\n");
+            break;
+          }
+          printf("本次支出说明\n");
+          scanf("%s",note);
+          balance -= money;
+          sprintf(temp,"\n支出\t%.1f\t\t%.1f\t\t%s",money,balance,note);//将本次信息写入到temp
+          strcat(details,temp);//将信息拼接到details
+        break;
+         case 4:
+          //退出
+          printf("确定退出吗？y/n\n");
+          do{
+              scanf("%c",&exit);
+               getchar();
+               if(exit == 'y' || exit == 'n'){
+                     exit_loop = 0;
+               }else{
+                 printf("你的输入有误，请重新输入\n");
+               }
+          } while(exit_loop);
+            if(exit == 'y'){
+                  loop = 0; 
+                }  
+        break;
+      }
+    } while (loop);
+    
+ printf("你退出了家庭记账软件");
+ getchar();
+}
+
+```
+2.记账软件版本2  加入结构体
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct Bookkeep{
+  double balance;//账号余额
+  char details[2000];//明细
+};
+  char note[20]; //说明
+  double money; //收支金额
+  char exits;
+  int exit_loop = 1;
+  int key;//表示用户输入的菜单
+  int loop = 1;
+  char temp[100]; //
+  void mainName(struct Bookkeep *keep);
+  void pay(struct Bookkeep *keep);
+  void income(struct Bookkeep *keep);
+  void exit();
+ 
+int main() {
+   struct Bookkeep keep;
+   memset(keep.details,3000,0);
+   strcpy(keep.details,"------当前收支明细------\n收支\t金额\t\t余额\t\t说明");
+   //复制后面的字符到details
+   keep.balance= 1000;
+   mainName(&keep);
+  printf("你退出了家庭记账软件");
+  getchar();
+}
 
 
+void mainName(struct Bookkeep *keep){
+    //1.显示菜单
+    do{
+     printf("------家庭收支记账软件------\n");
+     printf("\t1.收支明细\n");
+     printf("\t2.登记收入\n");
+     printf("\t3.登记支出\n");
+     printf("\t4.退出\n");
+     printf("\t请选择1-4:\n");
+     scanf("%d",&key);
+     getchar();
+      switch (key){
+      case 1:
+          printf("收支明细\n");
+          printf("%s\n",keep->details);
+        break;
+       case 2:
+          income(keep);
+      
+        break;
+        case 3:
+         pay(keep);
+        break;
+         case 4:
+          //退出
+           exit();
+        break;
+      }
+    } while (loop);
+  }
 
+  void pay(struct Bookkeep *keep){
+      printf("本次支出金额\n");
+      scanf("%lf",&money);
+      getchar();//过滤回车
+      if(keep->balance<money){
+        printf("余额不足\n");
+        return;
+      }
+      printf("本次支出说明\n");
+      scanf("%s",note);
+      (*keep).balance -= money;
+      sprintf(temp,"\n支出\t%.1f\t\t%.1f\t\t%s",money,(*keep).balance,note);//将本次信息写入到temp
+      strcat((*keep).details,temp);//将信息拼接到details
+  }
 
+    void income(struct Bookkeep *keep){
+        printf("本次收入金额\n");
+          scanf("%lf",&money);
+          getchar();//过滤回车
+          printf("本次收入说明\n");
+          scanf("%s",note);
+          (*keep).balance += money;
+          sprintf(temp,"\n收入\t%.1f\t\t%.1f\t\t%s",money, (*keep).balance,note);//将本次信息写入到temp
+          strcat((*keep).details,temp);//将信息拼接到details
+    }
+
+    void exit(){
+       printf("确定退出吗？y/n\n");
+          do{
+              scanf("%c",&exits);
+               getchar();
+               if(exits == 'y' || exits == 'n'){
+                     exit_loop = 0;
+               }else{
+                 printf("你的输入有误，请重新输入\n");
+               }
+          } while(exit_loop);
+            if(exits == 'y'){
+                  loop = 0; 
+                } 
+    }
+ 
+
+```
 
 
 
