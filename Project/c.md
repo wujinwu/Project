@@ -3356,11 +3356,296 @@ void mainName(struct Bookkeep *keep){
 
 ```
 
+## 客户信息管理系统 
+1.添加 ，删除，修改  
+2.使用结构体 ，数组  
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct Customer{
+  int  id;//编号
+  char name[20];//姓名
+  int  age;//年龄
+  char sex[10];//性别
+  char phone[100];//电话
+  char email[100];//邮箱
+};
+
+  int n = 0;//记录结构体大小
+  int kId; //记录输入要更改的客户编号
+  int key;//表示用户输入的菜单
+  int loop = 1;
+  char exits;
+  int exit_loop = 1;
+  struct Customer customer_shzu[100];
+  void mainName();
+  void exit();
+  void addCustomer();
+  void listCustomer();
+  void getCustomer(struct Customer *customer);
+  void updateCustomer();
+  void updateCustomers(struct Customer *customer);
+
+  void deleteCustomer();
+  int findIndex(int id);
+  int deleteCustomers(int id);
+int main() {
+ 
+  mainName();
+  printf("你退出了客户关系管理系统");
+  getchar();
+}
 
 
+void mainName(){
+    //1.显示菜单
+    do{
+     printf("\n\n------客户关系管理系统------\n");
+     printf("\t1.添加客户\n");
+     printf("\t2.删除客户\n");
+     printf("\t3.修改信息\n");
+     printf("\t4.显示客户列表\n");  
+     printf("\t5.退出\n");  
+     printf("\t请选择1-5:\n");
+     scanf("%d",&key);
+     getchar();//过滤回车
+      switch (key){
+      case 1:
+        //添加
+        addCustomer();
+        break;
+      case 2:
+        //删除
+        deleteCustomer();
+        break;
+      case 3:
+       //修改
+        updateCustomer();
+        break;
+      case 4:
+        //显示
+         listCustomer();
+        break;
+      case 5:
+       //退出
+       exit();
+        break;
+      default:
+       printf("你的输入有误,请重新输入");
+        break;
+      }
+    } while (loop);
+  }
+
+  void addCustomer(){
+   printf("------添加客户------\n");
+   struct Customer customer;
+   printf("编号:");
+   scanf("%d",&customer.id);
+   printf("\n姓名:");
+   scanf("%s",customer.name);
+   printf("\n年龄:");
+   scanf("%d",&customer.age);
+   printf("\n性别:");
+   scanf("%s",customer.sex);
+   printf("\n电话:");
+   scanf("%s",customer.phone);
+   printf("\n邮箱:");
+   scanf("%s",customer.email);
+   customer_shzu[n] = customer;
+   n++;
+   printf("------添加成功------");
+  }
+
+ void updateCustomer(){
+       printf("输入要修改的客户编号\n");
+       scanf("%d",&kId);
+       getchar();//过滤回车
+       for(int i=0;i<n;i++){
+         if(customer_shzu[i].id==kId){
+           updateCustomers(&customer_shzu[i]);
+            break;
+         }
+       }
+  printf("没有找到要修改的客户编号\n");
+ }
+
+void updateCustomers(struct Customer *customer){
+  printf("------修改客户信息------\n");
+  printf("\n姓名:");
+  scanf("%s",(*customer).name);
+  printf("\n年龄:");
+  scanf("%d",&(*customer).age);
+  printf("\n性别:");
+  scanf("%s",(*customer).sex);
+  printf("\n电话:");
+  scanf("%s",(*customer).phone);
+  printf("\n邮箱:");
+  scanf("%s",(*customer).email);
+  printf("------修改成功------\n");
+}
+
+  void deleteCustomer(){
+      
+       printf("输入要删除的客户编号(-1退出)\n");
+       scanf("%d",&kId);
+       getchar();//过滤回车
+      if(kId==-1){
+        printf("你放弃了删除");
+        return;
+      }
+      printf("确定删除吗？y/n\n");
+        do{
+          scanf("%c",&exits);
+          getchar();
+          if(exits == 'y' || exits == 'n'){
+                exit_loop = 0;
+          }else{
+            printf("你的输入有误，请重新输入\n");
+          }
+
+    } while(exit_loop);
+    
+      if(exits == 'y'){     
+        int i = deleteCustomers(kId);
+        if(i==0){
+            printf("没有找到要删除的客户编号\n");
+        }else{
+            printf("删除成功\n");
+        }
+      } 
+          
+    
+  }
+  int findIndex(int id){
+   int index = -1;
+      for(int i = 0;i < n;i ++){
+         if(kId==customer_shzu[i].id){
+           index = i;
+         }
+      }
+      return index;
+  }
+  int  deleteCustomers(int id){
+       int index = findIndex(id);
+        if(index == -1){
+          return 0;
+        }else{
+          for(int j= index;j<n;j++){
+            customer_shzu[j]=customer_shzu[j+1];
+          }
+          n--;
+          return 1;
+        }
+     
+ 
+
+  }
+   void listCustomer(){
+        printf("编号\t姓名\t年龄\t性别\t手机\t\t邮箱\n");
+        for(int i=0;i<n;i++){
+          getCustomer(&customer_shzu[i]);
+        }
+   }
+
+ void getCustomer(struct Customer *customer){
+   printf("%d\t%s\t%d\t%s\t%s\t%s\n",
+   (*customer).id,(*customer).name,(*customer).age,(*customer).sex,(*customer).phone,(*customer).email);
+ }
+    void exit(){
+       printf("确定退出吗？y/n\n");
+          do{
+              scanf("%c",&exits);
+               getchar();
+               if(exits == 'y' || exits == 'n'){
+                     exit_loop = 0;
+               }else{
+                 printf("你的输入有误，请重新输入\n");
+               }
+          } while(exit_loop);
+            if(exits == 'y'){
+                  loop = 0; 
+                } 
+    }
+```
+## 文件操作  
+1.流，输入流，输出流  
+2.c把所有设备都当成文件  
+标准输入stdin键盘  
+标准输出stdout屏幕   
+标准错误stderr你的屏幕  
 
 
+```c
+getchar()输入putchar读取到屏幕
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
+int main() {
+  int c;
+   printf("开始输入");
+   c =  getchar();
+   printf("\n你的输入");
+  putchar(c);
+   printf("\n");
+  getchar();
+  getchar();
+}
+
+```
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+  char c[10];
+   printf("开始输入");
+   gets(c);//输入一个字符串
+   printf("\n你的输入");
+   puts(c);//读取到屏幕
+   printf("\n");
+  getchar();
+  getchar();
+}
+```
+
+## 文件读写
+[文件读写链接](https://www.runoob.com/cprogramming/c-file-io.html)
+1.打开文件必须关闭文件  
+FILE *fopen( const char * filename(文件名), const char * mode(访问模式) );打开文件  
+ int fclose( FILE *fp );关闭文件  
+
+ int fputc( int c, FILE *fp );写入字符到文件  
+ int fputs( const char *s, FILE *fp );写入字符串到文件  
+ 
+ ```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main() {
+ 
+  FILE *wenjian = NULL;
+  char buff[1024];
+  //打开文件
+  wenjian = fopen("f://stu.txt","a+");
+  //写入文件
+   //fprintf(wenjian,"你好,上海\n");
+  // fputs("你好,北京 \n",wenjian);
+  //读取文件
+   while(fgets(buff, 1024, (FILE*)wenjian) != NULL){
+     printf(buff);
+   }
+   fclose(wenjian);
+   getchar();
+}
+
+ ```
 
 
 
