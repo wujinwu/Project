@@ -1,17 +1,11 @@
-# JAVA数据结构和算法
-
-## 稀疏数组
-
-1.解决问题  
-![稀疏数组解决问题及介绍](稀疏数组解决问题及介绍.jpg)
-2.稀疏数组模型及思路分析
-![稀疏数组模型及思路分析](稀疏数组模型及思路分析.jpg)
-
-```java
 package com.datastructure;
 
-public class tests {
-    void spareArray() {
+public class test {
+    public static void main(String[] args) {
+        spareArray();
+    }
+
+    static void spareArray() {
         int[][] arr = new int[11][11];
         arr[1][2] = 1;
         arr[2][3] = 2;
@@ -47,7 +41,7 @@ public class tests {
             }
         }
         System.out.println();
-        System.out.println("原始二维数组转换得到的稀疏数组");
+        System.out.println("二维数组转换后的稀疏数组");
         for (int[] row : sparseArray) {
             for (int data : row) {
                 System.out.printf("%d\t", data);
@@ -61,7 +55,7 @@ public class tests {
             arr2[sparseArray[i][0]][sparseArray[i][1]] = sparseArray[i][2];
         }
 
-        System.out.println("x疏数组转换的二维数组");
+        System.out.println("稀疏数组转换为二维数组");
         for (int[] row : arr2) {
             for (int data : row) {
                 System.out.printf("%d\t", data);
@@ -70,10 +64,3 @@ public class tests {
         }
     }
 }
-```  
-
-## 数组模拟队列
-
-
-
-
