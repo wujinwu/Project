@@ -216,6 +216,162 @@ class ArrayQueue {
 
 ```
 ### 问题 数组不能复用，使用一次就不能使用了，没有达到循环使用的作用
+#### 使用数组模拟环形队列
+![环形队列思路分析](环形队列思路分析.jpg)
+```java
+package com.datastructure;
+
+import java.util.Scanner;
+
+public class test {
+    public static void main(String[] args) {
+        //spareArray();
+        CircleQueue arrayQueue = new CircleQueue(3);
+        char key = ' ';//接收用户输入
+        Scanner scanner = new Scanner(System.in);
+        boolean loop = true;
+        while (loop) {
+            System.out.println("s(show):显示队列");
+            System.out.println("e(exit):退出程序");
+            System.out.println("a(add):添加数据到队列");
+            System.out.println("g(get):从队列取出数据");
+            System.out.println("h(head):查看队列头数据");
+            key = scanner.next().charAt(0);
+            switch (key) {
+                case 's':
+                    arrayQueue.showQueue();
+                    break;
+                case 'a':
+                    System.out.println("输入一个数");
+                    try {
+                        int n = scanner.nextInt();
+                        arrayQueue.addQueue(n);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 'g':
+                    try {
+                        int q = arrayQueue.removeQueue();
+                        System.out.printf("取出来的的数据是%d\n", q);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+
+                    break;
+                case 'h':
+                    try {
+                        int q = arrayQueue.headQueue();
+                        System.out.printf("取出来的的数据是%d\n", q);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 'e':
+                    System.exit(0);
+                    break;
+            }
+        }
+        System.out.println("程序退出");
+    }
+}
+
+class CircleQueue {
+
+    //数组模拟队列
+    int arrayMax;//队列最大值
+    int front;//指向队列的第一个元素,默认为0
+    int rear;//指向队列的最后的一个元素的后一个位置,空出一个空间做约定,队列满时（rear + 1)%arrayMax=front;队列空rear == front
+    int[] arr;//模拟队列的数组
+
+    public CircleQueue(int arrayMaxSize) {
+        arrayMax = arrayMaxSize;
+        arr = new int[arrayMaxSize];
+        front = 0;
+        rear = 0;
+    }
+
+    /**
+     * 判断队列是否满了
+     */
+    public boolean isFull() {
+        return front == (rear + 1) % arrayMax;
+    }
+
+    /**
+     * 判断队列是否空
+     */
+    public boolean isEmpty() {
+        return front == rear;
+    }
+
+    /**
+     * 队列取数
+     */
+    public int removeQueue() {
+        if (isEmpty()) {
+            throw new RuntimeException("队列空，不能取数据");
+        }
+        //先用value先保存front数组位置的值
+        //然后对front + 1,取模防止数组越界
+        //然后返回value
+        int value = arr[front];
+        front = (front + 1) % arrayMax;
+        return value;
+    }
+
+    /**
+     * 添加数进入队列
+     *
+     * @param n
+     */
+    public void addQueue(int n) {
+        if (isFull()) {
+            System.out.println("队列满了");
+            return;
+        }
+        arr[rear] = n;
+        //rear是队列最后一个位置 + 1，所有需要取模，否则会数组越界
+        rear = (rear + 1) % arrayMax;
+    }
+
+    /**
+     * 显示队列
+     */
+    public void showQueue() {
+        if (isEmpty()) {
+            System.out.println("队列空,无数据");
+            return;
+        }
+        System.out.printf("front[%d] = rear[%d] \n", front, rear);
+        for (int i = front; i < front + size(); i++) {
+            //i % arrayMax 因为是环形队列，所有需要取模，防止数组越界
+            System.out.printf("arr[%d] = %d \n", i % arrayMax, arr[i % arrayMax]);
+        }
+    }
+
+    /**
+     * 环形数组有效的数据的个数
+     */
+    public int size() {
+        return (rear + arrayMax - front) % arrayMax;
+    }
+
+    /**
+     * 队列头数据
+     */
+    public int headQueue() {
+        if (isEmpty()) {
+            throw new RuntimeException("队列空，不能取数据");
+        }
+        return arr[front];
+    }
+}
+```
+
+
+
+
 
 
 
