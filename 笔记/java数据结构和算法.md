@@ -672,6 +672,331 @@ class HeroNoad {
     }
 }
 ```
+### 单链表面试题
+```java
+package com.datastructure;
+
+
+import java.util.Stack;
+
+public class test {
+    public static void main(String[] args) {
+        SinglelinkedList singlelinkedList = new SinglelinkedList();
+        //添加节点
+        HeroNoad heroNoad = new HeroNoad(1, "宋江", "及时雨");
+        singlelinkedList.orderBy(heroNoad);
+        HeroNoad heroNoad4 = new HeroNoad(4, "林冲", "豹子头");
+        singlelinkedList.orderBy(heroNoad4);
+        HeroNoad heroNoad1 = new HeroNoad(2, "卢俊义", "玉麒麟");
+        singlelinkedList.orderBy(heroNoad1);
+        HeroNoad heroNoad2 = new HeroNoad(3, "吴用", "智多星");
+        singlelinkedList.orderBy(heroNoad2);
+
+        //1.显示链表有效节点个数
+        int value = getLength(singlelinkedList.getHead());
+        System.out.println(value + " individual");
+        //2.查找倒数第K个节点
+        HeroNoad lastHero = findLastIndexNode(singlelinkedList.getHead(), 1);
+        System.out.println(lastHero.toString());
+
+        //3.单链表的翻转
+        System.out.println("反转列表");
+        fanzhuan(singlelinkedList.getHead());
+        singlelinkedList.list();
+        //在反回来
+        fanzhuan(singlelinkedList.getHead());
+        //4.逆序打印单链表
+        System.out.println("逆序打印单链表");
+        reversePrint(singlelinkedList.getHead());
+        System.out.println("链表结构打印");
+        singlelinkedList.list();
+
+
+        //5.合并两个有序的链表，合并后还是有序的
+        SinglelinkedList singlelinkedList1 = new SinglelinkedList();
+        HeroNoad heroNoad11 = new HeroNoad(5, "宋江1", "及时雨");
+        singlelinkedList1.orderBy(heroNoad11);
+        HeroNoad heroNoad22 = new HeroNoad(6, "林冲2", "豹子头");
+        singlelinkedList1.orderBy(heroNoad22);
+        HeroNoad heroNoad33 = new HeroNoad(7, "卢俊义3", "玉麒麟");
+        singlelinkedList1.orderBy(heroNoad33);
+        HeroNoad heroNoad44 = new HeroNoad(8, "吴用4", "智多星");
+        singlelinkedList1.orderBy(heroNoad44);
+        System.out.println("第二个链表打印");
+        singlelinkedList1.list();
+
+        System.out.println("合并后的链表");
+        hebing(singlelinkedList, singlelinkedList1.getHead());
+        singlelinkedList.list();
+
+        System.out.println("第二个链表打印");
+        singlelinkedList1.list();
+    }
+
+    //5.合并两个有序的链表，合并后还是有序的
+    public static void hebing(SinglelinkedList singlelinkedList, HeroNoad head1) {
+        HeroNoad temp = head1.next;
+        HeroNoad next = null;
+        while (temp != null) {
+            next = temp.next;
+            singlelinkedList.orderBy(temp);
+            temp = next;
+        }
+    }
+
+    /**
+     * 面试题
+     */
+    //4.逆序打印单链表
+    //利用栈的先进后出的原理，就能倒序输出
+    public static void reversePrint(HeroNoad head) {
+        if (head.next == null || head.next.next == null) {
+            System.out.println("单链表为空或者只有一个节点");
+            return;
+        }
+        Stack<HeroNoad> heroNoadStack = new Stack<>();
+        HeroNoad temp = head.next;
+        while (temp != null) {
+            heroNoadStack.add(temp);
+            temp = temp.next;
+        }
+        while (heroNoadStack.size() > 0) {
+            System.out.println(heroNoadStack.pop());//特点，先进后出
+        }
+    }
+
+    //3.单链表的反转
+    public static void fanzhuan(HeroNoad head) {
+        if (head.next == null || head.next.next == null) {
+            System.out.println("单链表为空或者只有一个节点");
+            return;
+        }
+        HeroNoad reverseHead = new HeroNoad(0, "", "");
+        HeroNoad temp = head.next;//辅组变量，帮助我们遍历原来的链表
+        HeroNoad next = null;//记录下一个节点，防止节点断开
+        while (temp != null) {
+            next = temp.next;//保存下一个节点
+            temp.next = reverseHead.next;//将reverseHead.next 替换temp.next
+            reverseHead.next = temp;//将temp替换到头节点的next
+            temp = next;//将下一个节点给temp
+        }
+        head.next = reverseHead.next;//头节点替换
+    }
+
+    //2.查找倒数第K个节点
+
+    /***
+     *1.编写一个方法接收head节点
+     * 2.index 是倒数第index节点
+     * 3.先把链表从头到尾遍历一遍，得到链表的总长度getLength
+     * 4.得到size后，我们从链表的第一个开始遍历（size - index)个，就可以得到
+     * 5.如果找到了，就返回该节点，否则返回null
+     */
+    public static HeroNoad findLastIndexNode(HeroNoad head, int index) {
+        //判断链表为空,返回null
+        if (head.next == null) {
+            return null;
+        }
+        int size = getLength(head);
+        if (index < 0 || index > size) {
+            return null;
+        }
+        HeroNoad temp = head.next;
+        for (int i = 0; i < size - index; i++) {
+            temp = temp.next;
+        }
+        return temp;
+    }
+
+    //1.显示链表有效节点个数
+    public static int getLength(HeroNoad head) {
+        if (head.next == null) {
+            return 0;
+        }
+        int value = 0;
+        HeroNoad temp = head.next;
+        while (temp != null) {
+            value++;
+            temp = temp.next;
+        }
+
+        return value;
+    }
+}
+
+
+//定义一个SinglelinkedList来管理英雄人物
+class SinglelinkedList {
+    private HeroNoad head = new HeroNoad(0, "", "");//头节点不添加具体的数据
+
+    public HeroNoad getHead() {
+        return head;
+    }
+
+    public void setHead(HeroNoad head) {
+        this.head = head;
+    }
+
+    /**
+     * 添加节点到单向链表
+     * 思路，不考虑链表编号顺序时
+     * 1.找到当前链表最后一个节点
+     * 2.将最后节点的next指向新的节点
+     */
+    public void add(HeroNoad heroNoad) {
+        //因为Head节点不能动，所有需要一个辅组遍历temp
+        HeroNoad temp = head;
+        //遍历列表，找到最后
+        while (true) {
+            if (temp.next == null) {
+                break;
+            }
+            temp = temp.next;
+        }
+        //当退出while循环时，就指向了链表的最后
+        temp.next = heroNoad;
+    }
+
+    //删除节点
+    public void remove(int no) {
+        if (head.next == null) {
+            System.out.println("链表为空");
+            return;
+        }
+        //因为Head节点不能动，所有需要一个辅组遍历temp
+        HeroNoad temp = head;
+        boolean flag = false;//判断是否找到
+        while (true) {
+            if (temp.next == null) {
+                //链表已经遍历结束了
+                break;
+            }
+            if (temp.next.no == no) {
+                //找到了
+                flag = true;
+                break;
+            }
+
+            temp = temp.next;
+        }
+        if (flag) {
+            temp.next = temp.next.next;
+        } else {
+            System.out.printf("没有找到编号为%d的节点 \n", no);
+        }
+    }
+
+    //修改节点信息,根据编号来修改信息,编号不能改
+    public void update(HeroNoad newHeroNoad) {
+        if (head.next == null) {
+            System.out.println("链表为空");
+            return;
+        }
+        //因为Head节点不能动，所有需要一个辅组遍历temp
+        HeroNoad temp = head;
+        boolean flag = false;//判断是否找到
+        while (true) {
+            if (temp.next == null) {
+                //链表已经遍历结束了
+                break;
+            }
+            if (temp.next.no == newHeroNoad.no) {
+                //找到了
+                flag = true;
+                break;
+            }
+            temp = temp.next;
+        }
+        if (flag) {
+            temp.name = newHeroNoad.name;
+            temp.nikeName = newHeroNoad.nikeName;
+        } else {
+            System.out.printf("没有找到编号为%d的节点 \n", newHeroNoad.no);
+        }
+    }
+
+    //第二种添加方式,按排名将英雄添加到指定位置
+    //如果没有排名，则显示添加失败
+    public void orderBy(HeroNoad heroNoad) {
+        //因为头节点不能动,所有需要辅组节点temp来帮助找到添加的位置
+        //因为单链表，我们找的temp是位于添加位置的前一个节点，否则插入不了
+        HeroNoad temp = head;
+        boolean flag = false;//标识英雄添加的编号是否存在，默认为false值
+        while (true) {
+            if (temp.next == null) {//说明temp已经到链表最后
+                break;
+            }
+            if (temp.next.no > heroNoad.no) {
+                //位置找到了，就在temp直接插入
+                break;
+            } else if (temp.next.no == heroNoad.no) {
+                flag = true;
+                break;
+            }
+            temp = temp.next;
+        }
+        if (temp.no == heroNoad.no) {
+            flag = true;
+        }
+        if (flag) {
+            System.out.printf("准备插入的编号%d已经存在\n", heroNoad.no);
+        } else {
+            heroNoad.next = temp.next;
+            temp.next = heroNoad;
+        }
+    }
+
+    //显示列表(遍历)
+    public void list() {
+
+        //先判断链表是否为空
+        if (head.next == null) {
+            System.out.println("链表为空");
+            return;
+        }
+        //因为Head节点不能动，所有需要一个辅组遍历temp
+        HeroNoad temp = head.next;
+        while (true) {
+            System.out.println(temp.toString());
+            if (temp.next == null) {
+                break;
+            }
+            temp = temp.next;
+
+        }
+    }
+
+
+}
+
+class HeroNoad {
+    public int no;
+    public String name;
+    public String nikeName;
+    public HeroNoad next;
+
+    public HeroNoad(int no, String name, String nikeName) {
+        this.no = no;
+        this.name = name;
+        this.nikeName = nikeName;
+    }
+
+    @Override
+    public String toString() {
+        return "HeroNoad{" +
+                "no=" + no +
+                ", name='" + name + '\'' +
+                ", nikeName='" + nikeName + '\'' +
+                '}';
+    }
+}
+
+
+
+
+```
+
+
 
 
 
