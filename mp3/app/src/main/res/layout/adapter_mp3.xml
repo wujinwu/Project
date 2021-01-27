@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="58dp">
+
+    <ImageView
+        android:id="@+id/iv_head"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:scaleType="centerInside"
+        android:src="@mipmap/icon_music_head" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_head"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/iv_head"
+        android:text="名字"
+        android:textColor="@color/c_333"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_head"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/iv_head"
+        android:text="0k"
+        android:textColor="@color/c_999" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/iv_head"
+        android:layout_marginStart="46dp"
+        android:layout_toEndOf="@+id/tv_size"
+        android:text="1970"
+        android:textColor="@color/c_999" />
+</RelativeLayout>
