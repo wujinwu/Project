@@ -1015,7 +1015,235 @@ class HeroNoad {
 1.双向链表生成图
 ![双向链表分析图](双向链表分析图.jpg)
 
+## 约瑟夫问题 
+1.分析
+![约瑟夫问题示意图](约瑟夫问题.jpg)
+2.单向环形链表分析
+![单向环形链表分析](单向环形链表分析.jpg)
+```java
+package com.datastructure;
 
+
+import java.util.Stack;
+
+public class test {
+    public static void main(String[] args) {
+        CircleSingListedList circleSingListedList = new CircleSingListedList();
+        circleSingListedList.addBoy(5);
+        circleSingListedList.showBoy();
+
+    }
+
+}
+
+//创建一个环形的链表
+class CircleSingListedList {
+    //创建一个first节点
+    private Boy first = new Boy(-1);
+
+    public void addBoy(int nums) {
+        //nums数据校验
+        if (nums < 1) {
+            System.out.println("nums的值不正确");
+            return;
+        }
+        Boy curBoy = null;//辅组变量，帮助构建环形变量
+        for (int i = 1; i <= nums; i++) {
+            Boy boy = new Boy(i);
+            if (i == 1) {
+                first = boy;
+                first.setNext(first);
+                curBoy = first;//让curBoy指向第一个
+            } else {
+                curBoy.setNext(boy);//上一个节点next指向新的节点
+                boy.setNext(first);//将新的节点next指向第一个节点
+                //curBoy指向新节点
+                curBoy = boy;
+
+            }
+        }
+    }
+
+    public void showBoy() {
+        if (first == null) {
+            System.out.println("链表为空，没有任何小孩");
+            return;
+        }
+        //因为first不能动,所有需要辅组指针完成变量
+        Boy curBoy = first;
+        while (true) {
+            System.out.println(curBoy.getNo() + "");
+            if (curBoy.getNext() == first) {
+                break;
+            }
+            curBoy = curBoy.getNext();
+        }
+
+
+    }
+}
+
+class Boy {
+    private int no;
+    private Boy next;
+
+
+    public Boy(int no) {
+        this.no = no;
+    }
+
+    public Boy getNext() {
+        return next;
+    }
+
+    public void setNext(Boy next) {
+        this.next = next;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+}
+```
+1.约瑟夫问题小孩出圈图解
+![约瑟夫问题出圈](约瑟夫问题出圈.jpg)
+```java
+package com.datastructure;
+
+
+import java.util.Stack;
+
+public class test {
+    public static void main(String[] args) {
+        CircleSingListedList circleSingListedList = new CircleSingListedList();
+        circleSingListedList.addBoy(5);
+        circleSingListedList.showBoy();
+        circleSingListedList.countBoy(1, 2, 2);
+    }
+
+}
+
+//创建一个环形的链表
+class CircleSingListedList {
+    //创建一个first节点
+    private Boy first = new Boy(-1);
+
+    public void addBoy(int nums) {
+        //nums数据校验
+        if (nums < 1) {
+            System.out.println("nums的值不正确");
+            return;
+        }
+        Boy curBoy = null;//辅组变量，帮助构建环形变量
+        for (int i = 1; i < nums; i++) {
+            Boy boy = new Boy(i);
+            if (i == 1) {
+                first = boy;
+                first.setNext(first);
+                curBoy = first;//让curBoy指向第一个
+            } else {
+                curBoy.setNext(boy);//上一个节点next指向新的节点
+                boy.setNext(first);//将新的节点next指向第一个节点
+                //curBoy指向新节点
+                curBoy = boy;
+
+            }
+        }
+    }
+
+    public void showBoy() {
+        if (first == null) {
+            System.out.println("链表为空，没有任何小孩");
+            return;
+        }
+        //因为first不能动,所有需要辅组指针完成变量
+        Boy curBoy = first;
+        while (true) {
+            System.out.println(curBoy.getNo() + "");
+            if (curBoy.getNext() == first) {
+                break;
+            }
+            curBoy = curBoy.getNext();
+        }
+
+
+    }
+
+    /**
+     * 出圈
+     *
+     * @param startNo 从第几个开始数数
+     * @param endNO   结束数数
+     * @param nums    数几次
+     */
+    public void countBoy(int startNo, int endNO, int nums) {
+        if (first == null || startNo < 1 || endNO > nums) {
+            System.out.println("参数有误，请重新输入");
+            return;
+        }
+        Boy helpBoy = first;
+        while (true) {
+            if (helpBoy.getNext() == first) {//helpBoy指向最后一个节点
+                break;
+            }
+            helpBoy = helpBoy.getNext();
+
+        }
+        for (int i = 0; i < startNo - 1; i++) {
+            first = first.getNext();
+            helpBoy = helpBoy.getNext();
+        }
+        //从startNo开始数nums个数，第nums个出圈,循环数，直到最后
+        while (true) {
+            if (helpBoy == first) {
+                break;
+            }
+            for (int i = 0; i < nums - 1; i++) {
+                first = first.getNext();
+                helpBoy = helpBoy.getNext();
+            }
+            System.out.printf("第%d个小孩出圈 \n", first.getNo());
+            first = first.getNext();
+            helpBoy.setNext(first);
+        }
+    }
+}
+
+class Boy {
+    private int no;
+    private Boy next;
+
+
+    public Boy(int no) {
+        this.no = no;
+    }
+
+    public Boy getNext() {
+        return next;
+    }
+
+    public void setNext(Boy next) {
+        this.next = next;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+}
+
+
+
+
+
+```
 
 
 
