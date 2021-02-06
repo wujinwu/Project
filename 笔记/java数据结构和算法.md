@@ -1011,15 +1011,18 @@ class HeroNoad {
 ```
 
 ## 双向链表
+
 1.单链表的问题分析（只能查找一个方向,不能自我删除,删除某个节点，只能找到前一个节点，才能删除）  
 1.双向链表生成图
 ![双向链表分析图](双向链表分析图.jpg)
 
-## 约瑟夫问题 
+## 约瑟夫问题
+
 1.分析
 ![约瑟夫问题示意图](约瑟夫问题.jpg)
 2.单向环形链表分析
 ![单向环形链表分析](单向环形链表分析.jpg)
+
 ```java
 package com.datastructure;
 
@@ -1109,8 +1112,10 @@ class Boy {
     }
 }
 ```
+
 1.约瑟夫问题小孩出圈图解
 ![约瑟夫问题出圈](约瑟夫问题出圈.jpg)
+
 ```java
 package com.datastructure;
 
@@ -1238,12 +1243,454 @@ class Boy {
         this.no = no;
     }
 }
-
-
-
-
-
 ```
+
+## 栈
+
+1.英文是stack,先入后出的线性的有序列表  
+2.能插入和删除的栈顶，固定不变的是栈底
+
+### 出栈和入栈的概念
+
+![出栈和入栈的概念](出栈和入栈的概念.jpg)
+1.栈的应用场景
+![栈的应用场景](栈的应用场景.jpg)
+
+#### 数组模拟栈的出栈和入栈
+
+1.数组模拟栈入栈出栈分析
+![数组模拟栈入栈出栈分析](数组模拟栈入栈出栈分析.jpg)
+2.代码实现
+
+```java
+package com.datastructure;
+
+
+import java.util.Scanner;
+import java.util.Stack;
+
+public class test {
+    public static void main(String[] args) {
+        ArrayStack arrayStack = new ArrayStack(4);
+        String key = "";
+        boolean loop = true;
+        Scanner scanner = new Scanner(System.in);
+        while (loop) {
+            System.out.println("show:表示显示栈");
+            System.out.println("exit:退出程序");
+            System.out.println("push:入栈");
+            System.out.println("pop:出栈");
+            System.out.println("请输入你的选择");
+            key = scanner.next();
+            switch (key) {
+                case "show":
+                    arrayStack.list();
+                    break;
+                case "push":
+                    System.out.println("请输入一个数字");
+                    int value = scanner.nextInt();
+                    arrayStack.push(value);
+                    break;
+                case "pop":
+                    try {
+                        int valus = arrayStack.pop();
+                        System.out.printf("出栈的数据是%d \n", valus);
+                    } catch (RuntimeException e) {
+                        // System.out.println(e.getMessage());
+                    }
+                    break;
+                case "exit":
+                    scanner.close();
+                    loop = false;
+                    break;
+
+            }
+        }
+        System.out.println("程序退出");
+    }
+}
+
+
+class ArrayStack {
+    private int maxSize;//栈的大小
+    private int[] stack;//数组，数组模拟栈，数据就放到数组中
+    private int top = -1;//top表示栈顶,初始化为-1
+
+    public ArrayStack(int maxSize) {
+        this.maxSize = maxSize;
+        stack = new int[this.maxSize];
+    }
+
+    public boolean isFull() {
+        //栈满
+        return top == maxSize - 1;
+    }
+
+    public boolean isEmpty() {
+        //栈空
+        return top == -1;
+    }
+
+    //入栈
+    public void push(int value) {
+        if (isFull()) {
+            System.out.println("栈满,无法入栈");
+            return;
+        }
+        top++;
+        stack[top] = value;
+    }
+
+    //出栈
+    public int pop() {
+        if (isEmpty()) {
+            //抛出异常
+            System.out.println("栈空,没有数据");
+            new RuntimeException("栈空,没有数据");
+        }
+        int value = stack[top];
+        top--;
+        return value;
+    }
+
+    //遍历栈
+    public void list() {
+        if (isEmpty()) {
+            System.out.println("栈空,没有数据");
+            return;
+        }
+        for (int i = top; i >= 0; i--) {
+            System.out.printf("stack[%d] = %d \n", i, stack[i]);
+        }
+    }
+
+}
+```
+
+3.链表实现栈的代码，使用双向环形链表
+
+```java
+package com.datastructure;
+
+
+import java.util.Scanner;
+import java.util.Stack;
+
+public class test {
+    public static void main(String[] args) {
+        LinkStack arrayStack = new LinkStack();
+        String key = "";
+        boolean loop = true;
+        Scanner scanner = new Scanner(System.in);
+        while (loop) {
+            System.out.println("show:表示显示栈");
+            System.out.println("exit:退出程序");
+            System.out.println("push:入栈");
+            System.out.println("pop:出栈");
+            System.out.println("请输入你的选择");
+            key = scanner.next();
+            switch (key) {
+                case "show":
+                    arrayStack.list();
+                    break;
+                case "push":
+                    System.out.println("请输入一个数字");
+                    int value = scanner.nextInt();
+                    Stacks stack = new Stacks(value);
+                    arrayStack.pushStacks(stack);
+                    break;
+                case "pop":
+                    arrayStack.popStacks();
+                    break;
+                case "exit":
+                    scanner.close();
+                    loop = false;
+                    break;
+
+            }
+        }
+        System.out.println("程序退出");
+    }
+}
+
+class LinkStack {
+    private Stacks linkStack = new Stacks(-1);
+
+    //链表模拟 入栈
+    public void pushStacks(Stacks stacks) {
+        Stacks temp = linkStack;
+        while (true) {
+            if (temp.getNext() == null || temp.getNext() == linkStack) {
+                break;
+            }
+            temp = temp.getNext();
+        }
+        temp.setNext(stacks);//单链表
+        stacks.setPre(temp);//记录上一个节点,双向链表形成
+        stacks.setNext(linkStack);//记录第一个节点,环形链表
+        linkStack.setPre(stacks);//首节点记录最后一个节点,双向环形链表
+    }
+
+    //链表模拟出栈
+    public void popStacks() {
+
+        if (linkStack.getNext() == null || linkStack.getNext() == linkStack) {
+            System.out.println("栈空，没有数据");
+            return;
+        }
+        Stacks temp = linkStack.getPre();
+        System.out.printf("出栈的数据是%d \n", temp.getNo());
+
+        linkStack.setPre(temp.getPre());//第一个节点 拿到 出栈的节点的 上一个节点        形成出栈
+        temp.getPre().setNext(linkStack); //出栈的节点  的上一个节点next  替换为首节点  形成出栈
+    }
+
+    public void list() {
+        int count = 1;
+        if (linkStack.getNext() == null || linkStack.getNext() == linkStack) {
+            System.out.println("栈空，没有数据");
+            return;
+        }
+        Stacks temp = linkStack.getPre();
+        while (true) {
+            System.out.printf("stacks[%d] = %d \n", count, temp.getNo());
+            count++;
+            if (temp.getPre() == linkStack) {
+                break;
+            }
+            temp = temp.getPre();
+        }
+
+    }
+}
+
+class Stacks {
+    private int no;
+    private Stacks next;
+    private Stacks pre;
+
+    public Stacks getPre() {
+        return pre;
+    }
+
+    public void setPre(Stacks pre) {
+        this.pre = pre;
+    }
+
+    public Stacks(int no) {
+        this.no = no;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public Stacks getNext() {
+        return next;
+    }
+
+    public void setNext(Stacks next) {
+        this.next = next;
+    }
+}
+```
+
+### 栈实现综合计算器
+
+```java
+package com.datastructure;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class test {
+    public static void main(String[] args) {
+        //有bug 20-20 = 0;计算就出错了 6160 算出6200
+        String e = "6*1000+100+100-100+100+100-100-20-20";
+        ArrayStack numStack = new ArrayStack(10);
+        ArrayStack operStack = new ArrayStack(10);
+
+        int index = 0;
+        int num1 = 0;
+        int num2 = 0;
+        int oper = 0;
+        int res = 0;
+        char ch = ' ';
+        String keepNum = "";
+        while (true) {
+            ch = e.substring(index, index + 1).charAt(0);
+            if (operStack.isOper(ch)) {
+
+                //如果是运算符
+                if (operStack.isEmpty()) {
+                    //如果为空
+                    operStack.push(ch);
+                } else {
+                    if (operStack.priority(ch) < operStack.priority(operStack.pike())) {
+                        //如果当前优先级小于栈内的优先级
+                        //从数栈抛出两个数
+                        //从符号栈抛出一个运算符
+                        //进行运算
+                        //res入栈
+                        //符号入栈
+                        num1 = numStack.pop();
+                        num2 = numStack.pop();
+                        oper = operStack.pop();
+                        res = numStack.cal(num1, num2, oper);
+                        numStack.push(res);
+                        operStack.push(ch);
+                    } else {
+                        //如果当前优先级大于栈内的优先级,直接入栈
+                        operStack.push(ch);
+                    }
+                }
+            } else {
+                //如果是数字,直接入栈 -48得到真正的数字
+                //如果是多位数
+                keepNum += ch;
+                if (index == e.length() - 1) {
+                    numStack.push(Integer.parseInt(keepNum));
+                } else {
+                    ch = e.substring(index + 1, index + 2).charAt(0);
+                    if (operStack.isOper(ch)) {
+                        //如果后一位是运算符
+                        numStack.push(Integer.parseInt(keepNum));
+                        keepNum = "";
+                    }
+                }
+            }
+            index++;
+            if (index >= e.length()) {
+                break;
+            }
+
+        }
+
+        while (true) {
+            if (operStack.isEmpty()) {
+                break;
+            }
+            num1 = numStack.pop();
+            num2 = numStack.pop();
+            oper = operStack.pop();
+            res = numStack.cal(num1, num2, oper);
+            numStack.push(res);
+        }
+        System.out.printf("表达式%s=%d", e, numStack.pop());
+    }
+}
+class ArrayStack {
+    private int maxSize;//栈的大小
+    private int[] stack;//数组，数组模拟栈，数据就放到数组中
+    private int top = -1;//top表示栈顶,初始化为-1
+
+    public ArrayStack(int maxSize) {
+        this.maxSize = maxSize;
+        stack = new int[this.maxSize];
+    }
+
+    public boolean isFull() {
+        //栈满
+        return top == maxSize - 1;
+    }
+
+    public boolean isEmpty() {
+        //栈空
+        return top == -1;
+    }
+
+    //入栈
+    public void push(int value) {
+        if (isFull()) {
+            System.out.println("栈满,无法入栈");
+            return;
+        }
+        top++;
+        stack[top] = value;
+    }
+
+    //出栈
+    public int pop() {
+        if (isEmpty()) {
+            //抛出异常
+            System.out.println("栈空,没有数据");
+            new RuntimeException("栈空,没有数据");
+        }
+        int value = stack[top];
+        top--;
+        return value;
+    }
+
+    public int pike() {
+        int value = stack[top];
+        return value;
+    }
+
+    //遍历栈
+    public void list() {
+        if (isEmpty()) {
+            System.out.println("栈空,没有数据");
+            return;
+        }
+        for (int i = top; i >= 0; i--) {
+            System.out.printf("stack[%d] = %d \n", i, stack[i]);
+        }
+    }
+
+    /**
+     * 判断运算符的优先级
+     */
+    public int priority(int oper) {
+        if (oper == '*' || oper == '/') {
+            return 2;
+        } else if (oper == '+' || oper == '-') {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    /**
+     * 判断是否是运算符
+     */
+    public boolean isOper(char val) {
+        return val == '*' || val == '/' || val == '-' || val == '+';
+    }
+
+    //计算方法
+    public int cal(int num1, int num2, int oper) {
+        int res = 0;
+        switch (oper) {
+            case '+':
+                res = num1 + num2;
+                break;
+            case '-':
+                if (num1 > num2) {
+                    res = num1 - num2;
+                } else {
+                    res = num2 - num1;
+                }
+                break;
+            case '/':
+                res = num1 / num2;
+                break;
+            case '*':
+                res = num1 * num2;
+                break;
+            default:
+                break;
+        }
+        return res;
+    }
+}
+```
+
+
+
+
 
 
 
