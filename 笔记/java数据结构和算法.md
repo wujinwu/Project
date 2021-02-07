@@ -1503,12 +1503,13 @@ class Stacks {
 
 ```java
 package com.datastructure;
+
 import java.util.Scanner;
 import java.util.Stack;
 
 public class test {
     public static void main(String[] args) {
-        //有bug 20-20 = 0;计算就出错了 6160 算出6200
+        //有bug 20-20 = 0;计算就出错了 6160 算出6200 
         String e = "6*1000+100+100-100+100+100-100-20-20";
         ArrayStack numStack = new ArrayStack(10);
         ArrayStack operStack = new ArrayStack(10);
@@ -1582,6 +1583,7 @@ public class test {
         System.out.printf("表达式%s=%d", e, numStack.pop());
     }
 }
+
 class ArrayStack {
     private int maxSize;//栈的大小
     private int[] stack;//数组，数组模拟栈，数据就放到数组中
@@ -1687,6 +1689,93 @@ class ArrayStack {
     }
 }
 ```
+
+### 前缀表达式（波兰表达式)
+
+1.从右向左扫描
+![前缀表达式](前缀表达式.png)
+
+### 中缀表达式
+![中缀表达式](中缀表达式.jpg)
+2.中缀表达式转后缀
+![中缀表达式转后缀](中缀表达式转后缀.jpg)
+
+
+
+### 后缀表达式(逆波兰表达式)
+![后缀表达式](后缀表达式.jpg)
+
+### 逆波兰计算器
+
+![逆波兰计算器](逆波兰计算器.jpg)
+
+```java
+package com.datastructure;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Stack;
+
+public class test {
+    public static void main(String[] args) {
+        //定义一个逆波兰表达式
+        String suffixExpression = "3 4 + 5 * 6 -";
+
+        //1.先将suffixExpression放入list中
+        //2.用list传递方法中,配合栈完成计算
+        List<String> rpnList = getListString(suffixExpression);
+        System.out.println(rpnList);
+        System.out.println(calculate(rpnList));
+    }
+
+    //将逆波兰表达式，依次将数据和运算符放入list中
+    public static List<String> getListString(String sf) {
+        String[] sp = sf.split(" ");
+        List<String> list = new ArrayList<>();
+        for (String s : sp) {
+            list.add(s);
+        }
+        return list;
+    }
+
+    //完成运算
+    public static int calculate(List<String> ls) {
+        Stack<String> stack = new Stack<>();
+        for (String l : ls) {
+            if (l.matches("\\d+")) {//多位数
+                stack.push(l);//入栈
+            } else {
+                int num2 = Integer.parseInt(stack.pop());
+                int num1 = Integer.parseInt(stack.pop());
+                int res = 0;
+                switch (l) {
+                    case "*":
+                        res = num1 * num2;
+                        break;
+                    case "/":
+                        res = num1 / num2;
+                        break;
+                    case "+":
+                        res = num1 + num2;
+                        break;
+                    case "-":
+                        res = num1 - num2;
+                        break;
+                    default:
+                        System.out.println("运算符异常");
+                        break;
+                }
+                stack.push(res + "");
+            }
+        }
+        return Integer.parseInt(stack.pop());
+    }
+}
+```
+
+
+
 
 
 
